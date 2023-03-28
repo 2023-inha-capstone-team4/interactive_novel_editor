@@ -1,0 +1,9 @@
+.main_content
+{
+    height: 100%;
+}
+
+.main_content *
+{
+    color:white;
+}
