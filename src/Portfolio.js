@@ -89,7 +89,6 @@ function Portfolio()
             }
 
             loop();
-            console.log(TIME_TO_WAIT);
         }, TIME_TO_WAIT);
     }
 
