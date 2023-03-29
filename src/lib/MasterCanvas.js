@@ -48,7 +48,7 @@ function MasterCanvas()
     }
 
 
-    //Rotate 적용시 주의. 각도에 Math.PI/180 을 곱해야 라디안으로 변환됨.
+    //Rotate 적용시 주의. 각도에 Math.PI/180 을 곱해야 실수로 변환됨.
     function render(layer)
     {
         var image=layer.image;
