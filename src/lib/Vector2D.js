@@ -33,10 +33,6 @@ class Vector2D {
       return this.x * other.x + this.y * other.y;
     }
   
-    cross(other) {
-      return this.x * other.y - this.y * other.x;
-    }
-  
     toString() {
       return `(${this.x}, ${this.y})`;
     }

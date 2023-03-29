@@ -1,4 +1,4 @@
-class MasterTimer{
+export class MasterTimer{
     constructor()
     {
         this.currentTime= Date.now();
@@ -23,5 +23,3 @@ class MasterTimer{
         return (this.currentTime-this.startTime)/1000.0;
     }
 }
-
-export default MasterTimer;
