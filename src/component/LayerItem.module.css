@@ -1,0 +1,20 @@
+.layer_item
+{
+    list-style: none;
+}
+
+.layer_item:hover
+{
+    background-color: aliceblue;
+    cursor:pointer;
+}
+
+.selected_item
+{
+    background-color:blue;
+}
+
+.selected_item:hover
+{
+    background-color:blue;
+}

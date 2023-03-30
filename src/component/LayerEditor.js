@@ -1,3 +1,4 @@
+import LayerItem from './LayerItem';
 import styles from './LayoutEditor.module.css';
 import MenuBar from './menuBar';
 
@@ -12,6 +13,11 @@ function LayoutEditor()
         <div>
             <div className={styles.layout_editor_title} >레이아웃</div>
             <ul className={styles.layout_list}>
+                <LayerItem/>
+                <LayerItem/>
+                <LayerItem/>
+                <LayerItem/>
+
             </ul>
         </div>
         <MenuBar menus={[]}/>
