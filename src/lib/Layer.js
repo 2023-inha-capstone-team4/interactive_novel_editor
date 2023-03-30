@@ -53,7 +53,7 @@ export class ImageLayer extends Layer
 }
 
 
-export class textLayer extends Layer
+export class TextLayer extends Layer
 {
     constructor()
     {

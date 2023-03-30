@@ -2,9 +2,10 @@ import { useEffect, useRef } from 'react';
 import { MasterTimer } from './MasterTimer.js';
 import {Layer}  from './Layer.js';
 import {ImageLayer}  from './Layer.js';
+import { SceneManager } from './SceneManager.js';
 
 
-function MasterCanvas()
+function MasterCanvas(props)
 {
         //create timer
         const masterTimer = new MasterTimer();
@@ -13,6 +14,9 @@ function MasterCanvas()
         var frontCanvasRef = useRef(null);
         var frontCanvas=null;
         var frontContext=null;
+
+        //scene Manager
+        let sceneManger=new SceneManager();
 
 
         var square_angle=0;
@@ -26,7 +30,7 @@ function MasterCanvas()
         var canvasWidth=800;
         var canvasHeight=600;
 
-
+        var currentScene=props.scene;
 
     function prepareRendering()
     {
@@ -99,8 +103,14 @@ function MasterCanvas()
     
 
     return (
-        <canvas className='scene_canvas' ref={frontCanvasRef} width={canvasWidth} height={canvasHeight}></canvas>
-    );
+        <>
+            <div>
+                <div>Scene Name</div>
+                <div>Scene description</div>
+            </div>
+            <canvas className='scene_canvas' ref={frontCanvasRef} width={canvasWidth} height={canvasHeight}></canvas>
+        </>
+        );
 }
 
 

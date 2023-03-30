@@ -1,0 +1,14 @@
+.scene_item_box
+{
+    padding:5px;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.scene_item_box:hover
+{
+
+    background-color: aliceblue;
+    cursor:pointer;
+}

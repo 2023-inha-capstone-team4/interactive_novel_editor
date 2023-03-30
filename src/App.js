@@ -1,29 +1,25 @@
 import { memo } from "react";
-import './App.module.css';
-import Main from "./Main";
+import "./App.css";
+import Header from "./component/Header";
+import ScenesListView from "./component/ScenesListView";
+import ToolBox from "./component/ToolBox";
+import MasterCanvas from "./lib/MasterCanvas";
 
 function App() {
 
 
   return (
     <>
-    <header>
-		<nav>
-			<ul>
-				<li>NEW</li>
-				<li>저장</li>
-				<li>열기</li>
-			</ul>
-		</nav>
-	</header>
-	<main>
-		<Main/>
-	</main>
-	<footer>
-		<p>&copy; 2023 Woojung Kim. All rights reserved.</p>
-    <p>Phone : 010-5483-6403</p>
-    <p>E-mail : kimjung6408@naver.com</p>
-	</footer>
+	<div className='container'>
+    	<Header/>
+		<main>
+			<ScenesListView/>
+			<div className='canvas'>
+				<MasterCanvas />
+			</div>
+			<ToolBox/>
+		</main>
+	</div>
     </>
   );
 }

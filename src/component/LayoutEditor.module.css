@@ -1,0 +1,14 @@
+.layout_editor_box
+{
+    margin: 1px;
+    border: 1px solid gainsboro;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.layout_editor_title
+{
+    text-align: center;
+}

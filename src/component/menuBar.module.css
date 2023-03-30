@@ -1,0 +1,10 @@
+.menu_bar
+{
+    display:flex;
+    flex-direction: row;
+    justify-content: left;
+    flex-wrap: nowrap;
+    margin-left:-36px;
+
+    height:20px;
+}
