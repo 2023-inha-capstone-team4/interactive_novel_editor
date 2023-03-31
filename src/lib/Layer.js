@@ -30,6 +30,13 @@ export class Layer
         //insert keyframe last of  keyframeList (가장 큰 timeLabel 값일 때)
     }
 
+    //index 위치의 keyframe을 제거한다.
+    removeKeyframe(index)
+    {
+
+
+    }
+
     getKeyframes()
     {
         return this.keyframeList;

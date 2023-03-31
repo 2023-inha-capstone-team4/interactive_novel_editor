@@ -59,18 +59,18 @@ export class Keyframe
     {
         var timeSegmentLength=k2.timeLabel-k1.timeLabel;
 
-        var interpolationValue=parseFloat(time-k1.timeLabel)/timeSegmentLength;
+        var ratio=parseFloat(time-k1.timeLabel)/timeSegmentLength;
 
         var newTimeLabel=time;
-        var newPosition=new Vector2f((1.0-interpolationValue)*k1.position.x+interpolationValue*k2.position.x,
-                                 (1.0-interpolationValue)*k1.position.y+interpolationValue*k2.position.y
+        var newPosition=new Vector2f((1.0-ratio)*k1.position.x+ratio*k2.position.x,
+                                 (1.0-ratio)*k1.position.y+ratio*k2.position.y
                                 );
-        var newScale=new Vector2f((1.0-interpolationValue)*k1.scale.x+interpolationValue*k2.scale.x,
-                                (1.0-interpolationValue)*k1.scale.y+interpolationValue*k2.scale.y
+        var newScale=new Vector2f((1.0-ratio)*k1.scale.x+ratio*k2.scale.x,
+                                (1.0-ratio)*k1.scale.y+ratio*k2.scale.y
                                );
                                
-        var newRotation=(1.0-interpolationValue)*k1.rotation+interpolationValue*k2.rotation;
-        var newFadeAlpha=(1.0-interpolationValue)*k1.image_fade_alpha+interpolationValue*k2.image_fade_alpha;
+        var newRotation=(1.0-ratio)*k1.rotation+ratio*k2.rotation;
+        var newFadeAlpha=(1.0-ratio)*k1.image_fade_alpha+ratio*k2.image_fade_alpha;
 
         return new Keyframe(newTimeLabel, newPosition, newScale, newRotation, newFadeAlpha);
     }
