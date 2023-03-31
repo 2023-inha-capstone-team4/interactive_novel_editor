@@ -9,7 +9,6 @@ import { MasterManagerContext } from './MasterManagerContext.js';
 function MasterCanvas(props)
 {
         const frontCanvasRef=useRef(null);
-        //create timer
         const masterManager=useContext(MasterManagerContext);
 
         console.log(masterManager);
