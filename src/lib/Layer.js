@@ -43,21 +43,32 @@ export class Layer
     addKeyframe(keyframe)
     {
         this.keyframeList.push(keyframe);
-        this.keyframeList.sort();
+        this.sortKeyframes();
+    }
 
+    //keyframe들을 timeLabel 순서대로 정렬시킨다.
+    sortKeyframes()
+    {
+        this.keyframeList.sort(function(k1,k2){
+            return k1.timeLabel-k2.timeLabel;
+        });
+    }
 
-        //for each keyframeList[ i ] in keyframeList
-            // if keyframe.timeLabel < keyframeList[i].timeLabel
-                // insert forward of keyframeList[i]
-                // return
-        
-        //insert keyframe last of  keyframeList (가장 큰 timeLabel 값일 때)
+    //해당 index의 keyframe의 timeLabel을 toTime으로 이동시킨다.
+    moveKeyframe(keyframe_index, toTime)
+    {
+        this.keyframeList[keyframe_index].timeLabel=toTime;
+        this.sortKeyframes();
     }
 
     //index 위치의 keyframe을 제거한다.
     removeKeyframe(index)
     {
- 
+        this.keyframeList.filter((keyframe)=>{
+            return keyframe!==this.keyframeList[index];
+        });
+
+        this.sortKeyframes();
     }
 
     getKeyframes()

@@ -13,7 +13,7 @@ export class SceneRenderer
     processLayer(layer, playTime)
     {
         //keyframe이 없으면 렌더 대상에서 제외.
-        if(layer.getKeyframes().length==0) return;
+        if(layer.getKeyframes().length===0) return;
 
         let firstKeyframeTime=layer.getKeyframes().at(0).getTimeLabel();
 
@@ -46,7 +46,9 @@ export class SceneRenderer
 
     renderTargetScene(targetCanvas, targetScene, playTime)
     {
+
         if(targetScene==null) return;
+
 
         //렌더 타겟인 레이어들을 선별한다.
         targetScene.getLayers().forEach(layer => {
@@ -77,15 +79,15 @@ export class SceneRenderer
             else //if layer animation is repeatable
             {
                 let keyframeLastTime=lastKeyframe.getTimeLabel();
-                let repeatCount= parseInt((playTime-keyframeLastTime)/keyframeLastTime);
+                let repeatCount= parseInt((playTime)/keyframeLastTime);
 
-                if(targetLayer.repeatType=="forward")
+                if(targetLayer.repeatType==="forward")
                 {
                     playTime= playTime-repeatCount*keyframeLastTime;
                 }
-                else if(targetLayer.repeatType=="reverse")
+                else if(targetLayer.repeatType==="reverse")
                 {
-                    if(repeatCount%2==1)
+                    if(repeatCount%2===1)
                     {
                         //역방향 재생.
                         let backTime = playTime-repeatCount*keyframeLastTime;

@@ -11,7 +11,6 @@ function MasterCanvas()
         const frontCanvasRef=useRef(null);
         const masterManager=useContext(MasterManagerContext);
 
-        console.log(masterManager);
 
     useEffect(() => {
     
