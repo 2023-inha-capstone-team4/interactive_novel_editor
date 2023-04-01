@@ -13,6 +13,7 @@ function Header()
 					<li>새 프로젝트</li>
 					<li>저장</li>
 					<li>열기</li>
+					<li>미리보기</li>
 				</ul>
 			</nav>
 		</header>

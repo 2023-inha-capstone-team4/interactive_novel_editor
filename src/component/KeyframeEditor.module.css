@@ -1,0 +1,17 @@
+.keyframe_editor_box
+{
+    border: 1px solid gainsboro;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+}
+
+.keyframe_editor_title
+{
+    position:sticky;
+    text-align: center;
+    width:100%;
+    background-color: gainsboro;
+}

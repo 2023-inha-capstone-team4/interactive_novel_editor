@@ -12,7 +12,9 @@ function ScenesListView()
     let [sceneList, setSceneList] = useState([]);
 
 
-    sceneList.push(new Scene());
+    for(var i=0; i<100; i++)
+        sceneList.push(new Scene());
+
     
 
 

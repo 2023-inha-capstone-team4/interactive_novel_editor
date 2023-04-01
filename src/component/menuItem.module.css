@@ -6,13 +6,16 @@
 
     border: 1px solid gainsboro;
 
-    width:20px;
-    height: 20px;
-   
+
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-grow:1;
 }
 
 .button_image
 {
-    width:50%;
-    height:50%;
+    width:20px;
+    height:20px;   
 }

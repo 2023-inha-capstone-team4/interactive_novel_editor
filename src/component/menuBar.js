@@ -4,7 +4,7 @@ import MenuItem from './menuItem';
 
 function MenuBar(props)
 {
-    return <ul className={styles.menu_bar}>
+    return <div className={styles.menu_bar}>
         <MenuItem onClick={()=>{}} buttonImagePath="https://cdn-icons-png.flaticon.com/512/7170/7170850.png"/>
         <MenuItem onClick={()=>{}} buttonImagePath="https://cdn-icons-png.flaticon.com/512/7170/7170850.png"/>
         <MenuItem onClick={()=>{}} buttonImagePath="https://cdn-icons-png.flaticon.com/512/7170/7170850.png"/>
@@ -21,7 +21,7 @@ function MenuBar(props)
                 return <MenuItem onClick={menu.onClick} buttonImagePath={menu.buttonImagePath}/>
             })
         }
-    </ul>
+    </div>
 }
 
 export default MenuBar;

@@ -6,7 +6,7 @@ import { SceneManager } from './SceneManager.js';
 import { MasterManagerContext } from './MasterManagerContext.js';
 
 
-function MasterCanvas(props)
+function MasterCanvas()
 {
         const frontCanvasRef=useRef(null);
         const masterManager=useContext(MasterManagerContext);

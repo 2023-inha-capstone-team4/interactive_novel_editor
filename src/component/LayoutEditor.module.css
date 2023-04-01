@@ -1,6 +1,5 @@
-.layout_editor_box
+.layer_editor_box
 {
-    margin: 1px;
     border: 1px solid gainsboro;
     display:flex;
     flex-direction: column;
@@ -8,9 +7,19 @@
     flex-wrap: nowrap;
 }
 
-.layout_editor_title
+.layer_editor_title
 {
+    position:sticky;
     text-align: center;
     width:100%;
     background-color: gainsboro;
+}
+
+.layer_list
+{
+    display:flex;
+    flex-direction: column-reverse;
+    height:250px;
+    overflow: scroll;
+
 }

@@ -7,7 +7,7 @@ function MenuItem(props)
     return (
         <>
         <div className={styles.menu_button} onClick={props.onClick}>
-            <img src="https://cdn-icons-png.flaticon.com/512/7170/7170850.png" width="100%" height="100%"></img>
+            <img className={styles.button_image} src="https://cdn-icons-png.flaticon.com/512/7170/7170850.png"></img>
         </div>
         </>
     );

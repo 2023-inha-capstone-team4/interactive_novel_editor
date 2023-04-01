@@ -6,21 +6,6 @@ body {
 	font-family: Arial, sans-serif;
 }
 
-.container
-{
-	margin:0;
-	padding:0;
-}
-
-
-
-
-main{
-	margin:0;
-	min-height: 600px;
-	padding:0;
-}
-
 .toolbox
 {
 	grid-area:'toolbox';
@@ -35,9 +20,10 @@ main
 {
 	margin:0;
 	padding:0;
+	min-height: 600px;
 	display:flex;
-	flex-direction: row;
-	flex-wrap: wrap;
+
+
 
 }
 
