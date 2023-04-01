@@ -2,6 +2,11 @@ import { MasterTimer } from './MasterTimer.js';
 import {Layer}  from './Layer.js';
 import {ImageLayer}  from './Layer.js';
 import { SceneManager } from './SceneManager.js';
+import { SceneRenderer } from './SceneRenderer.js';
+import { SceneTimer } from './SceneTimer.js';
+import { Scene } from './Scene.js';
+import { Keyframe } from './Keyframe.js';
+import Vector2D from './Vector2D.js';
 
 
 export class MasterManager
@@ -10,10 +15,17 @@ export class MasterManager
         {
         //create timer
         this.masterTimer = new MasterTimer();
+        this.sceneTimer = new SceneTimer();
+
+        //canvas context
         this.frontContext=null;
+        this.frontCanvas=null;
 
         //scene Manager
-        this.sceneManger=new SceneManager();
+        this.sceneManager=new SceneManager();
+
+        //scene renderer
+        this.sceneRenderer= new SceneRenderer();
 
         //test variable
         this.square_angle=0;
@@ -22,20 +34,82 @@ export class MasterManager
         //target frames per second
         this.FPS=60;
 
-        this.myLayer=new ImageLayer('https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785');
-
         this.canvasWidth=800;
         this.canvasHeight=600;
 
-        this.mainLoop=this.mainLoop.bind(this);
+        //layer test code
+        this.myLayer=new ImageLayer('https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785');
+        this.myLayer.setRepeatType("none");
+
+        //keyframe test code
+        for(let i=0; i<11; i++)
+        {
+            let position=new Vector2D(this.canvasWidth/2+300*Math.cos(i*36*Math.PI/180.0),this.canvasHeight/2+300*Math.sin(i*36*Math.PI/180.0));
+            let scale= new Vector2D(1.0-0.5*Math.cos(i*36.0*Math.PI/180.0),1.0-0.5*Math.cos(i*36.0*Math.PI/180.0));
+            let rotation = 360*i;
+            let fade_alpha=1.0;
+
+            var newKeyframe=new Keyframe(parseFloat(i),position, scale,rotation, fade_alpha);
+
+            this.myLayer.addKeyframe(newKeyframe);
         }
 
-    setCanvasContext(canvasContext)
+        this.sceneManager.getCurrentScene().addLayer(this.myLayer);
+
+        console.log(this.sceneManager);
+
+        this.mainLoop=this.mainLoop.bind(this);
+
+
+        //play상태 : 재생 상태
+        //stop 상태 : scene 정지 상태
+        this.playerStatus="play";
+
+        }
+    
+    play()
     {
-        this.frontContext=canvasContext;
+        this.playerStatus="play";
     }
 
-    prepareRendering()
+    stop()
+    {
+        this.playerStatus="stop";
+        this.sceneTimer.stop();
+    }
+
+    pause()
+    {
+        this.playerStatus="stop";
+    }
+
+    
+
+
+
+    setCanvas(canvas)
+    {   
+        this.frontCanvas=canvas;
+        this.frontContext=canvas.getContext("2d");
+    }
+
+    /** 
+     * 
+     * Scene Play Time에 대한 정보를 로드한다.     * 
+     */
+    prepareRenderingData()
+    {
+
+        //scene timer는 play, pause, stop이냐에 따라서 다르게 처리한다.
+        if(this.playerStatus=="play")
+        {
+            this.sceneTimer.updateTimer(this.masterTimer.getDeltaTime());
+        }
+        //else if master manager의 status가 stop
+        //업데이트 하지 않는다.
+    }
+
+    clearScreen()
     {
         this.frontContext.save();
         this.frontContext.globalAlpha=1.0;
@@ -45,31 +119,12 @@ export class MasterManager
     }
 
 
-    updateScene(deltaTime)
+
+
+    render()
     {
-        this.square_angle+=180.0*deltaTime;
-        this.global_alpha_angle+=10*deltaTime;
-
-        this.square_angle%=360;
-        this.global_alpha_angle%=360;
-    }
-
-
-    //Rotate 적용시 주의. 각도에 Math.PI/180 을 곱해야 실수로 변환됨.
-    render(layer)
-    {
-        let image=layer.image;
-
-
-        this.frontContext.save();
-
-
-        this.frontContext.translate(this.canvasWidth/2, this.canvasHeight/2);
-        //scale 구문
-        this.frontContext.rotate(this.square_angle*Math.PI/180.0);
-        this.frontContext.drawImage(image,-image.width/2,-image.height/2, image.width, image.height);
-        
-        this.frontContext.restore();
+        this.clearScreen();
+        this.sceneRenderer.renderTargetScene(this.frontCanvas,this.sceneManager.getCurrentScene(), this.sceneTimer.getPlayTime());
     }
 
 
@@ -90,10 +145,9 @@ export class MasterManager
 
         this.masterTimer.updateTimer();
 
-        this.prepareRendering();
+        this.prepareRenderingData();
 
-        this.updateScene(this.masterTimer.getDeltaTime());
-        this.render(this.myLayer);
+        this.render();
 
     }
 

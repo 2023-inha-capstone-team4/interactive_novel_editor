@@ -6,10 +6,7 @@ export class SceneManager
     {
         this.currentSceneIndex=0;
         this.sceneList=[];
-    }
 
-    initialize()
-    {
         let newScene=new Scene();
         this.sceneList.push(newScene);
     }

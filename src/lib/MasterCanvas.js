@@ -15,10 +15,9 @@ function MasterCanvas()
 
     useEffect(() => {
     
-        var frontCanvas=frontCanvasRef.current;        
-        var frontContext=frontCanvas.getContext('2d');
+        var frontCanvas=frontCanvasRef.current;     
 
-        masterManager.setCanvasContext(frontContext);
+        masterManager.setCanvas(frontCanvas);
         masterManager.mainLoop();
     }, []);
     

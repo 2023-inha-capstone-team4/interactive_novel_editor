@@ -4,7 +4,7 @@ import LayerItem from './LayerItem';
 import styles from './LayoutEditor.module.css';
 import MenuBar from './menuBar';
 
-function LayoutEditor()
+function LayerEditor()
 {
 
     const [layers, setLayers] = useState([]);
@@ -32,4 +32,4 @@ function LayoutEditor()
 
 
 
-export default LayoutEditor;
+export default LayerEditor;

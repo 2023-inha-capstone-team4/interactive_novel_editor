@@ -1,4 +1,4 @@
-import {Vector2f} from './Vector2D';
+import Vector2D, {Vector2f} from './Vector2D';
 
 export class Keyframe
 {
@@ -62,10 +62,10 @@ export class Keyframe
         var ratio=parseFloat(time-k1.timeLabel)/timeSegmentLength;
 
         var newTimeLabel=time;
-        var newPosition=new Vector2f((1.0-ratio)*k1.position.x+ratio*k2.position.x,
+        var newPosition=new Vector2D((1.0-ratio)*k1.position.x+ratio*k2.position.x,
                                  (1.0-ratio)*k1.position.y+ratio*k2.position.y
                                 );
-        var newScale=new Vector2f((1.0-ratio)*k1.scale.x+ratio*k2.scale.x,
+        var newScale=new Vector2D((1.0-ratio)*k1.scale.x+ratio*k2.scale.x,
                                 (1.0-ratio)*k1.scale.y+ratio*k2.scale.y
                                );
                                

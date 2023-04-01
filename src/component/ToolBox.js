@@ -1,5 +1,5 @@
 import KeyframeEditor from './KeyframeEditor';
-import LayoutEditor from './LayerEditor';
+import LayerEditor from './LayerEditor';
 import styles from './ToolBox.module.css';
 
 function ToolBox()
@@ -11,7 +11,7 @@ function ToolBox()
 
     return (<>
         <section className={styles.toolbox}>
-            <LayoutEditor/>
+            <LayerEditor/>
             <KeyframeEditor/>
         </section>
         </>);

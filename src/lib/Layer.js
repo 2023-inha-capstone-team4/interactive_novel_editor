@@ -11,18 +11,42 @@ export class Layer
         //reverse : 역재생 반복
         this.repeatType="none";
 
-        //forward 정방향 재생 중
-        //reverse 역방향 재생 중
-        this.playDirection="forward";
-
         //키프레임 목록을 timeLabel(timestamp)에 따라 순차적으로 저장.
         this.keyframeList=[];
     }
 
+    setRepeatType(type)
+    {
+        switch(type)
+        {
+        case "none":
+            this.repeatType="none";
+            break;
+        case "forward":
+            this.repeatType="forward";
+            break;
+        case "reverse":
+            this.repeatType="reverse";
+            break;
+        default:
+            return;
+        }
+    }
 
+
+    /**
+     * 
+     * @todo
+     * 테스트용 코드로 작성됨. 수정해야함
+     * 
+     */
     addKeyframe(keyframe)
     {
-        //for each keyframe i in keyframeList
+        this.keyframeList.push(keyframe);
+        this.keyframeList.sort();
+
+
+        //for each keyframeList[ i ] in keyframeList
             // if keyframe.timeLabel < keyframeList[i].timeLabel
                 // insert forward of keyframeList[i]
                 // return
@@ -33,8 +57,7 @@ export class Layer
     //index 위치의 keyframe을 제거한다.
     removeKeyframe(index)
     {
-
-
+ 
     }
 
     getKeyframes()
