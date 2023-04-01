@@ -22,9 +22,10 @@ main
 	padding:0;
 	min-height: 600px;
 	display:flex;
-
-
-
+	flex-direction: row;
+	flex-wrap: nowrap;
+	
+	max-height:600px;
 }
 
 

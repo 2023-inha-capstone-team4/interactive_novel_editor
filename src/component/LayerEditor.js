@@ -17,16 +17,13 @@ function LayoutEditor()
 
     return <>
     <section className={styles.layer_editor_box}>
-        <div>
-            <div className={styles.layer_editor_title} >레이아웃</div>
+            <div className={styles.layer_editor_title} >레이어</div>
             <div className={styles.layer_list}>
                 {
                     layers.map((layer)=>{
                         return <LayerItem/>
                     })
                 }
-
-            </div>
         </div>
         <MenuBar menus={[]}/>
     </section>

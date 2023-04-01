@@ -1,7 +1,9 @@
 .toolbox
 {
-    display:grid;
-    grid-template-columns:1fr;
-    grid-template-rows: 1fr 1fr;
+    display:flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+
     flex-grow:1;
 }
