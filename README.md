@@ -45,3 +45,13 @@ sceneRenderer에 의해 SoundKeyframe에 의해 volume(소리 크기)이 Linear 
 ## issue 1.
 canvas를 인자로 전달하면, sceneRenderer에서 clearScreen을 올바르게 처리하지 못하는 문제가 있습니다.
 따라서 MasterManager에 clearScreen을 처리한 문제가 있습니다.
+
+
+## Todo.
+1. Editor UI 구현
+2. 폰트 레이어 구현
+3. (회의 후 선택사항) 이펙트 레이어 추가 및 구현(날씨 효과, 연기 효과, 파도 웨이브 효과), 이미지 레이어에 스프라이트 애니메이션 추가
+4. webtoon project data 형식 정의. (server) => scene list를 json 형태로 
+5. 프로젝트 저장, 수정, 삭제 기능 (server)
+6. User-side webtoon rendering
+7. User-side webtoon viewer
