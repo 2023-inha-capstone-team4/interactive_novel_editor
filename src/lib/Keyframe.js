@@ -75,3 +75,36 @@ export class Keyframe
         return new Keyframe(newTimeLabel, newPosition, newScale, newRotation, newFadeAlpha);
     }
 }
+
+
+export class TextKeyframe extends Keyframe
+{
+    constructor(timeLabel, position, scale,rotation,image_fade_alpha, color)
+    {
+        super(timeLabel, position, scale,rotation,image_fade_alpha);
+        this.color=color;
+    }
+
+    setColor(color)
+    {
+        this.color=color;
+    }
+
+    static interpolate(k1,k2, time)
+    {
+        var ncKeyframe=super.interpolate(k1,k2,time);
+
+        //interpolate color
+        var timeSegmentLength=k2.timeLabel-k1.timeLabel;
+
+        var ratio=parseFloat(time-k1.timeLabel)/timeSegmentLength;
+        var newColor={red:0, green:0, blue:0};
+        newColor.red=(1.0-ratio)*k1.color.red+ratio*k2.color.red;
+        newColor.green=(1.0-ratio)*k1.color.green+ratio*k2.color.green;
+        newColor.blue=(1.0-ratio)*k1.color.blue+ratio*k2.color.blue;
+
+
+
+        return new TextKeyframe(ncKeyframe.timeLabel,ncKeyframe.position,ncKeyframe.scale, ncKeyframe.rotation,ncKeyframe.image_fade_alpha,newColor);
+    }
+}

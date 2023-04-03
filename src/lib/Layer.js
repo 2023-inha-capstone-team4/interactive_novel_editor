@@ -34,11 +34,8 @@ export class Layer
     }
 
 
-    /**
-     * 
-     * @todo
-     * 테스트용 코드로 작성됨. 수정해야함
-     * 
+    /* 키프레임을 추가한다.
+    * 
      */
     addKeyframe(keyframe)
     {
@@ -99,9 +96,52 @@ export class TextLayer extends Layer
     constructor()
     {
         super();
-        this.fontType='네이버나눔고딕';
-        this.fontSize=15;
-        this.text="";
+        this.fontType='sans-serif';
+        this.fontSize=30;
+        this.text="hello!";
+        this.layerType="text";
+    }
+
+
+    setText(text)
+    {
+        this.text=text;
+    }
+
+    getText()
+    {
+        return this.text;
+    }
+
+
+}
+
+export class EffectLayer extends Layer
+{
+    constructor()
+    {
+        super();
+        this.layerType="effect";
+
+        /*
+            rain, snow, wave 가능
+        */
+        this.effectType="rain"
+
+        this.properties={
+            x_scale:1,
+            y_scale:6,
+            direction_angle:270,
+            speed_per_second:20,
+        };
+
+        /**
+         * wave의 경우, 다른 프로퍼티를 가진다.
+         * amplitude: 웨이브의 진폭
+         * frequency : 주파수
+         * phase : 시작시 위상
+         * speed : 출렁이는 속도
+         * * */
         
     }
 }

@@ -1,4 +1,4 @@
-import { Keyframe } from "./Keyframe";
+import { Keyframe, TextKeyframe } from "./Keyframe";
 import { Layer } from "./Layer";
 
 
@@ -28,7 +28,27 @@ export class SceneRenderer
     //render by keyframe data
     renderLayerByKeyframe(targetCanvas, layer, keyframe)
     {
+       switch(layer.layerType)
+       {
+        case "image":
+            this.renderImageLayer(targetCanvas, layer, keyframe);
+            break;
+        case "text":
+            this.renderTextLayer(targetCanvas, layer, keyframe);
+            break;
+        case "effect":
+            this.renderEffectLayer(targetCanvas, layer, keyframe);
+            break;
+        default:
+            break;
+       }
+    }
+
+    renderImageLayer(targetCanvas, layer, keyframe)
+    {
         let context=targetCanvas.getContext("2d");
+
+
 
         let image=layer.image;
 
@@ -43,6 +63,42 @@ export class SceneRenderer
         
         context.restore();
     }
+
+    renderTextLayer(targetCanvas, layer, keyframe)
+    {
+        let context=targetCanvas.getContext("2d");
+
+        context.save();
+        //setFont
+        context.font=layer.fontSize+"px "+layer.fontType;
+        context.fillStyle="rgba("+keyframe.color.red+","+keyframe.color.green+","+keyframe.color.blue+",1)";
+        context.globalAlpha=keyframe.image_fade_alpha;
+        context.fontWeight=900;
+
+        context.translate(keyframe.position.x, keyframe.position.y);
+        context.scale(keyframe.scale.x, keyframe.scale.y);
+        context.rotate(keyframe.rotation*Math.PI/180.0);
+
+        let textWidth=context.measureText(layer.getText()).width;
+        let textHeight=layer.fontSize;
+
+        context.fillText(layer.getText(),-textWidth/2, textHeight/2);
+    
+        context.restore();
+    }
+
+
+    /**
+     * 아직 구현되지 않음.
+     * 
+     * **/
+    renderEffectLayer(targetCanvas, layer, keyframe)
+    {
+
+    }
+
+
+
 
     renderTargetScene(targetCanvas, targetScene, playTime)
     {
@@ -106,7 +162,17 @@ export class SceneRenderer
                 {
                     if(keyframes.at(j).timeLabel <= playTime && playTime < keyframes.at(j+1).timeLabel)
                     {
-                        let interpolatedKeyframe=Keyframe.interpolate(keyframes[j], keyframes[j+1], playTime);
+                        let interpolatedKeyframe=null;
+
+                        if(targetLayer.layerType==="image")
+                        {
+                            interpolatedKeyframe=Keyframe.interpolate(keyframes[j], keyframes[j+1], playTime);
+                        }
+                        else if(targetLayer.layerType==="text")
+                        {
+                            interpolatedKeyframe=TextKeyframe.interpolate(keyframes[j], keyframes[j+1], playTime);
+                            console.log(interpolatedKeyframe.color);
+                        }
                         this.renderLayerByKeyframe(targetCanvas, targetLayer,interpolatedKeyframe);
                         break;
                     }

@@ -37,3 +37,10 @@ footer {
 	margin:0;
 	text-align: left;
 }
+
+@font-face {
+	font-family: 'Nanum Square';
+	font-style: normal;
+	font-weight: 600;
+	src: url('https://cdn.jsdelivr.net/npm/nanum-square-round@latest/css/nanumsquareround.css');
+  }
