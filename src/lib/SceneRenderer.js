@@ -97,9 +97,20 @@ export class SceneRenderer
 
     }
 
+    renderTargetSceneV2(targetCanvas, targetScene,playTime)
+    {
+        if(targetScene==null) return;
+
+        targetScene.getLayers().forEach(layer=>{
+            this.processLayer(layer, playTime);
+        });
 
 
+    }
 
+
+    //none이 아닌 레이어가 최초로 등장한 후부터
+    //해당 레이어의 repeatType이 이후의 레이어에도 전부 똑같이 적용되는 버그가 있음.
     renderTargetScene(targetCanvas, targetScene, playTime)
     {
 
@@ -116,6 +127,8 @@ export class SceneRenderer
         for(var i=0; i<this.targetLayers.length; i++)
         {
             let targetLayer=this.targetLayers[i];
+            let repeatType=targetLayer.repeatType;
+            console.log(repeatType);
 
             let keyframes=targetLayer.getKeyframes();
 
@@ -128,10 +141,9 @@ export class SceneRenderer
             {
                 this.renderLayerByKeyframe(targetCanvas, targetLayer, firstKeyframe);
             } //마지막 키프레임 시간을 지났고, 반복하지 않을 때, 마지막 키프레임으로 렌더링한다.
-            else if(lastKeyframe.getTimeLabel()<playTime && targetLayer.repeatType==="none")
+            else if(lastKeyframe.getTimeLabel()<playTime && repeatType==="none")
             {
                 this.renderLayerByKeyframe(targetCanvas, targetLayer, lastKeyframe);
-                console.log(targetLayer);
             }
             else //if layer animation is repeatable
             {
@@ -140,11 +152,11 @@ export class SceneRenderer
 
                 
 
-                if(targetLayer.repeatType==="forward")
+                if(repeatType==="forward")
                 {
                     playTime= playTime-repeatCount*keyframeLastTime;
                 }
-                else if(targetLayer.repeatType==="reverse")
+                else if(repeatType==="reverse")
                 {
 
 
