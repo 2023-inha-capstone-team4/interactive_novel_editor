@@ -14,8 +14,13 @@
     flex-grow:1;
 }
 
+.menu_button:hover
+{
+    background-color: aquamarine;
+}
+
 .button_image
 {
-    width:20px;
-    height:20px;   
+    width:15px;
+    height:15px;   
 }

@@ -97,7 +97,7 @@ export class TextLayer extends Layer
     {
         super();
         this.fontType='sans-serif';
-        this.fontSize=30;
+        this.fontSize=60;
         this.text="hello!";
         this.layerType="text";
     }

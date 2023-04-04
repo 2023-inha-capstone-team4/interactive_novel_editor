@@ -44,6 +44,19 @@ export class Scene{
         this.selectedLayerIndex=this.layerList.length-1;
     }
 
+
+
+    /**
+     * 사운드를 추가한다.
+     * 
+     * 
+     * 
+     */
+    addSound(soundEvent)
+    {
+        this.soundList.push(soundEvent);
+    }
+
     removeSelectedLayer()
     {
         this.layerList=this.layerList.filter(function(layer,index, arr){
@@ -103,11 +116,5 @@ export class Scene{
     getLayers()
     {
         return this.layerList;
-    }
-
-
-    getSounds()
-    {
-        return this.soundsList;
     }
 }

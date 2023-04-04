@@ -115,7 +115,7 @@ export class SceneRenderer
         // for each targetLayer[i] in targetLayers
         for(var i=0; i<this.targetLayers.length; i++)
         {
-            let targetLayer=this.targetLayers.at(i);
+            let targetLayer=this.targetLayers[i];
 
             let keyframes=targetLayer.getKeyframes();
 
@@ -131,11 +131,14 @@ export class SceneRenderer
             else if(lastKeyframe.getTimeLabel()<playTime && targetLayer.repeatType==="none")
             {
                 this.renderLayerByKeyframe(targetCanvas, targetLayer, lastKeyframe);
+                console.log(targetLayer);
             }
             else //if layer animation is repeatable
             {
                 let keyframeLastTime=lastKeyframe.getTimeLabel();
                 let repeatCount= parseInt((playTime)/keyframeLastTime);
+
+                
 
                 if(targetLayer.repeatType==="forward")
                 {
@@ -143,6 +146,8 @@ export class SceneRenderer
                 }
                 else if(targetLayer.repeatType==="reverse")
                 {
+
+
                     if(repeatCount%2===1)
                     {
                         //역방향 재생.
@@ -171,8 +176,9 @@ export class SceneRenderer
                         else if(targetLayer.layerType==="text")
                         {
                             interpolatedKeyframe=TextKeyframe.interpolate(keyframes[j], keyframes[j+1], playTime);
-                            console.log(interpolatedKeyframe.color);
                         }
+
+
                         this.renderLayerByKeyframe(targetCanvas, targetLayer,interpolatedKeyframe);
                         break;
                     }

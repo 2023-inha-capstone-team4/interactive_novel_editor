@@ -8,7 +8,18 @@
 
 .scene_item_box:hover
 {
+    cursor:pointer;
+}
 
-    background-color: aliceblue;
+.scene_item_box_selected
+{
+    padding:5px;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.scene_item_box_selected:hover
+{
     cursor:pointer;
 }
