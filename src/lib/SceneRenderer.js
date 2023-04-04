@@ -105,12 +105,18 @@ export class SceneRenderer
             this.processLayer(layer, playTime);
         });
 
+        this.targetLayers.forEach(layer=>{
+            console.log(layer.repeatType);
+        });
+
+        this.cleanUp();
 
     }
 
 
     //none이 아닌 레이어가 최초로 등장한 후부터
     //해당 레이어의 repeatType이 이후의 레이어에도 전부 똑같이 적용되는 버그가 있음.
+    //keyframe time도 동일하게 적용되는 황당 버그
     renderTargetScene(targetCanvas, targetScene, playTime)
     {
 
@@ -128,7 +134,7 @@ export class SceneRenderer
         {
             let targetLayer=this.targetLayers[i];
             let repeatType=targetLayer.repeatType;
-            console.log(repeatType);
+            let manipulatedPlaytime=playTime;
 
             let keyframes=targetLayer.getKeyframes();
 
@@ -154,40 +160,39 @@ export class SceneRenderer
 
                 if(repeatType==="forward")
                 {
-                    playTime= playTime-repeatCount*keyframeLastTime;
+                    manipulatedPlaytime= playTime-repeatCount*keyframeLastTime;
                 }
                 else if(repeatType==="reverse")
                 {
-
 
                     if(repeatCount%2===1)
                     {
                         //역방향 재생.
                         let backTime = playTime-repeatCount*keyframeLastTime;
-                        playTime = keyframeLastTime-backTime;
+                        manipulatedPlaytime = keyframeLastTime-backTime;
 
                     }
                     else //repeatCount가 짝수
                     {
                         //forward의 경우와 동일하게 처리.
-                        playTime= playTime-repeatCount*keyframeLastTime;
+                        manipulatedPlaytime= playTime-repeatCount*keyframeLastTime;
                     }
                 }
 
                 //Linear Interpolation을 적용하여 중간 프레임을 구하고 렌더링한다.
                 for(var j=0; j<keyframes.length-1;j++)
                 {
-                    if(keyframes.at(j).timeLabel <= playTime && playTime < keyframes.at(j+1).timeLabel)
+                    if(keyframes.at(j).timeLabel <= manipulatedPlaytime && manipulatedPlaytime < keyframes.at(j+1).timeLabel)
                     {
                         let interpolatedKeyframe=null;
 
                         if(targetLayer.layerType==="image")
                         {
-                            interpolatedKeyframe=Keyframe.interpolate(keyframes[j], keyframes[j+1], playTime);
+                            interpolatedKeyframe=Keyframe.interpolate(keyframes[j], keyframes[j+1], manipulatedPlaytime);
                         }
                         else if(targetLayer.layerType==="text")
                         {
-                            interpolatedKeyframe=TextKeyframe.interpolate(keyframes[j], keyframes[j+1], playTime);
+                            interpolatedKeyframe=TextKeyframe.interpolate(keyframes[j], keyframes[j+1], manipulatedPlaytime);
                         }
 
 

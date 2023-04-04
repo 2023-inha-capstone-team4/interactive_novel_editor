@@ -25,10 +25,8 @@ function LayerEditor()
 
     useEffect(()=>{
         setLayers([...masterManager.sceneManager.getCurrentScene().layerList]);
-
-        console.log('ddd');
     }
-    ,[masterManager.sceneManager.sceneList]);
+    ,[]);
 
 
     return <>
@@ -36,8 +34,8 @@ function LayerEditor()
             <div className={styles.layer_editor_title} >레이어</div>
             <div className={styles.layer_list}>
                 {
-                    layers.map((layer)=>{
-                        return <LayerItem layer={layer}/>
+                    layers.map((layer, index, arr)=>{
+                        return <LayerItem key={index} layer={layer}/>
                     })
                 }
         </div>

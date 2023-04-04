@@ -56,7 +56,7 @@ function ScenesListView()
             {
                 sceneList.map((sceneItem, index, array)=>{
 
-                    return <SceneItem scene={sceneItem} index={index} style={{
+                    return <SceneItem key={index} scene={sceneItem} index={index} style={{
                         backgroundColor: selectedScene==masterManager.sceneManager.sceneList[index]? 'pink' : 'azure',
 
                     }} onClick={()=>{selectScene(index)}}></SceneItem>
