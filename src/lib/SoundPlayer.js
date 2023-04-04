@@ -76,6 +76,8 @@ export class SoundPlayer
      * * */
     playSoundToTargetScene(targetScene,playTime)
     {
+        if(targetScene==null) return;
+
         this.processSound(targetScene.soundList, playTime);
 
         this.playTargetSoundList.forEach((sound)=>{

@@ -25,8 +25,8 @@ function LayerEditor()
 
     useEffect(()=>{
         setLayers([...masterManager.sceneManager.getCurrentScene().layerList]);
-    }
-    ,[]);
+    },
+    [masterManager.sceneManager.sceneList]);
 
 
     return <>

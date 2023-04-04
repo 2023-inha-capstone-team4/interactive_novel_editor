@@ -36,7 +36,8 @@ export class SceneManager
     {
         let newScene=new Scene();
         this.sceneList=[...this.sceneList,newScene];
-        this.curSceneIdx=this.sceneList.length-1;
+        
+        this.selectScene(this.sceneList.length-1);
     }
 
     removeSelectedScene() {
@@ -47,7 +48,7 @@ export class SceneManager
         if (this.sceneList.length <= 1) {
           this.curSceneIndex = 0;
         } else {
-          this.curSceneIndex -= 1;
+          this.curSceneIndex =this.curSceneIdx-1;
         }
       }
 

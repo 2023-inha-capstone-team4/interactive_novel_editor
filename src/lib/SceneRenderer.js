@@ -97,22 +97,6 @@ export class SceneRenderer
 
     }
 
-    renderTargetSceneV2(targetCanvas, targetScene,playTime)
-    {
-        if(targetScene==null) return;
-
-        targetScene.getLayers().forEach(layer=>{
-            this.processLayer(layer, playTime);
-        });
-
-        this.targetLayers.forEach(layer=>{
-            console.log(layer.repeatType);
-        });
-
-        this.cleanUp();
-
-    }
-
 
     //none이 아닌 레이어가 최초로 등장한 후부터
     //해당 레이어의 repeatType이 이후의 레이어에도 전부 똑같이 적용되는 버그가 있음.

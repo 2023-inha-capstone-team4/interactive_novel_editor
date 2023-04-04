@@ -51,7 +51,7 @@ export class MasterManager
         this.txtLayer=new TextLayer();
         this.txtLayer.setText("사랑해");
         this.txtLayer.fontType="Arial";
-        this.txtLayer.repeatType="reverse";
+        this.txtLayer.repeatType="forward";
         console.log(this.txtLayer.repeatType);
         this.txtLayer.name="사랑해";
         this.txtLayer.addKeyframe(new TextKeyframe(0,new Vector2D(400,300), new Vector2D(1,1), 0, 1, {red:255, green:255, blue:255}));
@@ -59,56 +59,66 @@ export class MasterManager
         this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
 
         this.txtLayer=new TextLayer();
-        this.txtLayer.setText("안녕");
+        this.txtLayer.setText("잘가");
         this.txtLayer.fontType="Sans Serif";
         this.txtLayer.repeatType="forward";
-        this.txtLayer.name="안녕";
+        this.txtLayer.name="잘가";
         this.txtLayer.addKeyframe(new TextKeyframe(0,new Vector2D(400,300), new Vector2D(1,1), 0, 1, {red:255, green:255, blue:255}));
         this.txtLayer.addKeyframe(new TextKeyframe(0.75,new Vector2D(800,300), new Vector2D(3,3), 0, 0, {red:255, green:124, blue:0}));
         this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
 
-        //scene 2번째 test code
-        this.sceneManager.selectScene(1);
-        this.imageLayer=new ImageLayer("https://item.kakaocdn.net/do/b0de2adb4008db8aec4d0616b9a04e0deffd194bae87d73dd00522794070855d");
-        this.imageLayer.addKeyframe(new Keyframe(0,new Vector2D(400,300), new Vector2D(1,1),0,1));
-        this.imageLayer.name="무지";
-        this.sceneManager.getCurrentScene().addLayer(this.imageLayer);
+        // //scene 2번째 test code
+        // this.sceneManager.selectScene(1);
+        // this.imageLayer=new ImageLayer("https://item.kakaocdn.net/do/b0de2adb4008db8aec4d0616b9a04e0deffd194bae87d73dd00522794070855d");
+        // this.imageLayer.addKeyframe(new Keyframe(0,new Vector2D(400,300), new Vector2D(1,1),0,1));
+        // this.imageLayer.name="무지";
+        // this.sceneManager.getCurrentScene().addLayer(this.imageLayer);
         
         
 
-                //scene 3번째 test code
-                this.sceneManager.selectScene(2);
-                this.imageLayer=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
-                this.imageLayer.setRepeatType("none");
-                this.imageLayer.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
-                this.imageLayer.addKeyframe(new Keyframe(2,new Vector2D(300,300), new Vector2D(2,2),0,1));
-                this.imageLayer.name="라이언2";
-                this.sceneManager.getCurrentScene().addLayer(this.imageLayer);
-                console.log(this.sceneManager.getCurrentScene().getLayers());
+        //         //scene 3번째 test code
+        //         this.sceneManager.selectScene(2);
 
-                this.imageLayer2=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
-                this.imageLayer2.repeatType=("none");
-                this.imageLayer2.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
-                this.imageLayer2.addKeyframe(new Keyframe(2,new Vector2D(600,300), new Vector2D(2,2),0,1));
-                this.imageLayer2.name="라이언3";
-                this.sceneManager.getCurrentScene().addLayer(this.imageLayer2);
-                console.log(this.sceneManager.getCurrentScene().getLayers());
+        //         this.imageLayer=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
+        //         this.imageLayer.setRepeatType("forward");
+        //         this.imageLayer.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
+        //         this.imageLayer.addKeyframe(new Keyframe(2,new Vector2D(100,100), new Vector2D(2,2),0,0.3));
+        //         this.imageLayer.name="라이언1";
+        //         this.sceneManager.getCurrentScene().addLayer(this.imageLayer);
+        //         console.log(this.sceneManager.getCurrentScene().getLayers());
 
-                this.imageLayer3=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
-                this.imageLayer3.repeatType="forward";
-                this.imageLayer3.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
-                this.imageLayer3.addKeyframe(new Keyframe(2,new Vector2D(600,500), new Vector2D(0.5,0.5),0,1));
-                this.imageLayer3.name="라이언4";
-                this.sceneManager.getCurrentScene().addLayer(this.imageLayer3);
-                console.log(this.sceneManager.getCurrentScene().getLayers());
 
-                this.imageLayer4=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
-                this.imageLayer4.setRepeatType("reverse");
-                this.imageLayer4.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
-                this.imageLayer4.addKeyframe(new Keyframe(2,new Vector2D(100,100), new Vector2D(1.5,1.5),0,1));
-                this.imageLayer4.name="라이언5";
-                this.sceneManager.getCurrentScene().addLayer(this.imageLayer4);
-                console.log(this.sceneManager.getCurrentScene().getLayers());
+        //         this.imageLayer=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
+        //         this.imageLayer.setRepeatType("none");
+        //         this.imageLayer.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
+        //         this.imageLayer.addKeyframe(new Keyframe(2,new Vector2D(300,300), new Vector2D(2,2),0,1));
+        //         this.imageLayer.name="라이언2";
+        //         this.sceneManager.getCurrentScene().addLayer(this.imageLayer);
+        //         console.log(this.sceneManager.getCurrentScene().getLayers());
+
+        //         this.imageLayer2=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
+        //         this.imageLayer2.repeatType=("none");
+        //         this.imageLayer2.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
+        //         this.imageLayer2.addKeyframe(new Keyframe(2,new Vector2D(600,300), new Vector2D(2,2),0,1));
+        //         this.imageLayer2.name="라이언3";
+        //         this.sceneManager.getCurrentScene().addLayer(this.imageLayer2);
+        //         console.log(this.sceneManager.getCurrentScene().getLayers());
+
+        //         this.imageLayer3=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
+        //         this.imageLayer3.repeatType="forward";
+        //         this.imageLayer3.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
+        //         this.imageLayer3.addKeyframe(new Keyframe(2,new Vector2D(600,500), new Vector2D(0.5,0.5),0,1));
+        //         this.imageLayer3.name="라이언4";
+        //         this.sceneManager.getCurrentScene().addLayer(this.imageLayer3);
+        //         console.log(this.sceneManager.getCurrentScene().getLayers());
+
+        //         this.imageLayer4=new ImageLayer("https://item.kakaocdn.net/do/d84248170c2c52303db27306a00fb8618f324a0b9c48f77dbce3a43bd11ce785");
+        //         this.imageLayer4.setRepeatType("reverse");
+        //         this.imageLayer4.addKeyframe(new Keyframe(0,new Vector2D(500,300), new Vector2D(1,1),0,1));
+        //         this.imageLayer4.addKeyframe(new Keyframe(2,new Vector2D(100,100), new Vector2D(1.5,1.5),0,1));
+        //         this.imageLayer4.name="라이언5";
+        //         this.sceneManager.getCurrentScene().addLayer(this.imageLayer4);
+        //         console.log(this.sceneManager.getCurrentScene().getLayers());
 
                 this.sceneManager.selectScene(0);
 
