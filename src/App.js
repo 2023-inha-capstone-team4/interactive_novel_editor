@@ -1,9 +1,10 @@
 import { memo } from "react";
 import "./App.css";
 import Header from "./component/Header";
+import KeyframeEditor from "./component/KeyframeEditor";
 import ScenesListView from "./component/ScenesListView";
-import ToolBox from "./component/ToolBox";
-import MasterCanvas from "./lib/MasterCanvas";
+import LayerEditor from "./component/LayerEditor";
+import MasterCanvas from "./component/MasterCanvas";
 import { MasterManager } from "./lib/MasterManager";
 import { MasterManagerContext } from "./lib/MasterManagerContext";
 
@@ -14,16 +15,15 @@ function App() {
   return (
     <>
 	<MasterManagerContext.Provider value={new MasterManager()}>
-	<div className='container'>
     	<Header/>
 		<main>
-			<ScenesListView/>
-			<div className='canvas'>
+			<div className="top_contents">
+				<ScenesListView/>
 				<MasterCanvas />
-			</div>
-			<ToolBox/>
+				<LayerEditor/>
+				</div>
+				<KeyframeEditor/>
 		</main>
-	</div>
 	</MasterManagerContext.Provider>
     </>
   );

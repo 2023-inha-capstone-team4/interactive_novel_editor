@@ -13,6 +13,8 @@
 .scene_view{
    margin:0px;
    height:600px;
+   min-width:150px;
+   max-width:150px;
    display:flex;
    flex-direction: column;
    justify-content: space-between;
@@ -23,7 +25,7 @@
 .scenes
 {
   height:550px;
-  overflow:scroll;
+  overflow-y:scroll;
   background-color: aquamarine;
 
 }

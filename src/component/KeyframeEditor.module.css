@@ -21,4 +21,41 @@
 
 .keyframe_tools
 {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.keyframe_bar
+{
+    background-color: black;
+    width:90%;
+    height:3px;
+    margin:3px;
+    margin-top: 5%;
+    margin-bottom:5%;
+}
+
+.keyframe_bar_button
+{
+    position:relative;
+    width:5px;
+    height:5px;
+    border-radius:20px;
+    background-color: red;
+}
+
+.keyframe_bar_button:hover
+{
+    background-color:yellow;
+}
+
+.vertical_line
+{
+    align-self: center;
+    position:absolute;
+    width:2px;
+    height: 5%;
+    background-color: red;
 }

@@ -34,6 +34,7 @@ function ScenesListView()
     useEffect(
         ()=>{
             setSceneList([...masterManager.sceneManager.sceneList]);
+            setSelectedScene(masterManager.sceneManager.getCurrentScene());
         }
     ,[masterManager.sceneManager.sceneList, masterManager.sceneManager.curSceneIdx]);
 
@@ -48,18 +49,21 @@ function ScenesListView()
     {
         masterManager.sceneManager.createNewScene();
         selectScene(masterManager.sceneManager.sceneList.length-1);
+        setSceneList([...masterManager.sceneManager.sceneList]);
     }
 
     function openChangeSceneNameModal()
     {
         setOpenChangeNameModal(true);
+        setNameText(masterManager.sceneManager.getCurrentScene().name);
     }
 
     function changeSceneNameTextfield(event)
     {
-        if(event.target.value.length==0) return;
-        
-        setNameText(event.target.value);
+        if(event.target.value.length<=15)
+        {
+            setNameText(event.target.value);
+        }
     }
 
     function changeSceneName()
@@ -115,6 +119,8 @@ function ScenesListView()
             //change name modal
             isOpenChangeNameModal? 
             <Modal>
+                <div>최대 15글자까지 가능합니다</div>
+                <div>현재의 Scene이름 : {masterManager.sceneManager.getCurrentScene().name}</div>
                 <textarea className={styles.name_text_area} value={nameText} onChange={(e)=>{
                     changeSceneNameTextfield(e);
                 }}></textarea>

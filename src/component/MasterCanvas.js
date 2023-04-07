@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef } from 'react';
-import { MasterTimer } from './MasterTimer.js';
-import {Layer}  from './Layer.js';
-import {ImageLayer}  from './Layer.js';
-import { SceneManager } from './SceneManager.js';
-import { MasterManagerContext } from './MasterManagerContext.js';
+import { MasterTimer } from '../lib/MasterTimer.js';
+import {Layer}  from '../lib/Layer.js';
+import {ImageLayer}  from '../lib/Layer.js';
+import { SceneManager } from '../lib/SceneManager.js';
+import { MasterManagerContext } from '../lib/MasterManagerContext.js';
 
 
 function MasterCanvas()

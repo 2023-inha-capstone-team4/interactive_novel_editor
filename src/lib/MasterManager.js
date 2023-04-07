@@ -55,17 +55,25 @@ export class MasterManager
         console.log(this.txtLayer.repeatType);
         this.txtLayer.name="사랑해";
         this.txtLayer.addKeyframe(new TextKeyframe(0,new Vector2D(400,300), new Vector2D(1,1), 0, 1, {red:255, green:255, blue:255}));
-        this.txtLayer.addKeyframe(new TextKeyframe(0.75,new Vector2D(300,300), new Vector2D(3,3), 0, 0, {red:255, green:124, blue:0}));
+        this.txtLayer.addKeyframe(new TextKeyframe(0.75,new Vector2D(300,300), new Vector2D(3,3), 0, 0.5, {red:255, green:124, blue:0}));
+        this.txtLayer.addKeyframe(new TextKeyframe(1.0,new Vector2D(300,300), new Vector2D(5,5), 0, 1.0, {red:255, green:0, blue:0}));
+        this.txtLayer.addKeyframe(new TextKeyframe(1.75,new Vector2D(300,300), new Vector2D(2,2), 0, 0.8, {red:255, green:124, blue:0}));
+        this.txtLayer.addKeyframe(new TextKeyframe(3,new Vector2D(300,300), new Vector2D(1,1), 0, 0.5, {red:255, green:124, blue:0}));
+        this.txtLayer.addKeyframe(new TextKeyframe(4,new Vector2D(300,300), new Vector2D(2,2), 0, 0.4, {red:255, green:0, blue:0}));
+        this.txtLayer.addKeyframe(new TextKeyframe(6,new Vector2D(300,300), new Vector2D(3,3), 0, 0.9, {red:255, green:124, blue:50}));
+        this.txtLayer.addKeyframe(new TextKeyframe(9,new Vector2D(300,300), new Vector2D(4,4), 0,0.6, {red:128, green:0, blue:255}));
+        this.txtLayer.addKeyframe(new TextKeyframe(12,new Vector2D(300,300), new Vector2D(4,4), 0,0, {red:128, green:0, blue:255}));
+
         this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
 
-        this.txtLayer=new TextLayer();
-        this.txtLayer.setText("잘가");
-        this.txtLayer.fontType="Sans Serif";
-        this.txtLayer.repeatType="forward";
-        this.txtLayer.name="잘가";
-        this.txtLayer.addKeyframe(new TextKeyframe(0,new Vector2D(400,300), new Vector2D(1,1), 0, 1, {red:255, green:255, blue:255}));
-        this.txtLayer.addKeyframe(new TextKeyframe(0.75,new Vector2D(800,300), new Vector2D(3,3), 0, 0, {red:255, green:124, blue:0}));
-        this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
+        // this.txtLayer=new TextLayer();
+        // this.txtLayer.setText("잘가");
+        // this.txtLayer.fontType="Sans Serif";
+        // this.txtLayer.repeatType="forward";
+        // this.txtLayer.name="잘가";
+        // this.txtLayer.addKeyframe(new TextKeyframe(0,new Vector2D(400,300), new Vector2D(1,1), 0, 1, {red:255, green:255, blue:255}));
+        // this.txtLayer.addKeyframe(new TextKeyframe(0.75,new Vector2D(800,300), new Vector2D(3,3), 0, 0, {red:255, green:124, blue:0}));
+        // this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
 
         // //scene 2번째 test code
         // this.sceneManager.selectScene(1);

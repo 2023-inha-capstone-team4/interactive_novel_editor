@@ -18,15 +18,20 @@ import MenuItem from './menuItem';
 function LayerEditor()
 {
 
-    const [layers, setLayers] = useState([]);
     const masterManager=useContext(MasterManagerContext);
+    const [layers, setLayers] = useState([]);
 
     const [selectedLayer, setSelectedLayer] = useState(null);
 
     useEffect(()=>{
-        setLayers([...masterManager.sceneManager.getCurrentScene().layerList]);
-    },
-    [masterManager.sceneManager.sceneList]);
+        setLayers(masterManager.sceneManager.getCurrentScene().layerList);
+    },[]);
+
+
+    function selectLayer(index)
+    {
+        setSelectedLayer(masterManager.sceneManager.getCurrentScene().layerList[index]);
+    }
 
 
     return <>
@@ -35,7 +40,18 @@ function LayerEditor()
             <div className={styles.layer_list}>
                 {
                     layers.map((layer, index, arr)=>{
-                        return <LayerItem key={index} layer={layer}/>
+                        return <LayerItem key={index} 
+                        
+                        style={{
+                            backgroundColor: selectedLayer==masterManager.sceneManager.getCurrentScene().layerList[index]? 'pink' : 'azure',
+    
+                        }}
+                        
+                        layer={layer} onClick={()=>{
+
+                            selectLayer(index);
+
+                        }}/>
                     })
                 }
         </div>

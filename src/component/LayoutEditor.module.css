@@ -7,8 +7,6 @@
     flex-wrap: nowrap;
 
     overflow:scroll;
-
-    height:1000px;
     flex-grow: 1;
 }
 

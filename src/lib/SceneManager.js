@@ -5,17 +5,14 @@ export class SceneManager
     constructor()
     {
         this.sceneList=[];
-
-        let newScene=new Scene();
-        this.sceneList.push(newScene);
-
-        let newScene2=new Scene();
-        this.sceneList.push(newScene2);
-
-        let newScene3=new Scene();
-        this.sceneList.push(newScene3);
+        this.currentScene= new Scene();
+        this.sceneList.push(this.currentScene);
 
         this.curSceneIdx=0;
+
+
+        //manage scene layers
+        this.currentLayerIndex=0;
     }
 
 
@@ -23,7 +20,7 @@ export class SceneManager
     {
         if(this.sceneList.length===0) return null;
 
-        return this.sceneList.at(this.curSceneIndex);
+        return this.currentScene;
     }
 
 
@@ -38,6 +35,7 @@ export class SceneManager
         this.sceneList=[...this.sceneList,newScene];
         
         this.selectScene(this.sceneList.length-1);
+        this.currentScene=newScene;
     }
 
     removeSelectedScene() {
@@ -45,10 +43,17 @@ export class SceneManager
           return index !== this.curSceneIndex;
         });
       
-        if (this.sceneList.length <= 1) {
+        if (this.sceneList.length ===1) {
+          this.currentScene=this.sceneList[0];
           this.curSceneIndex = 0;
-        } else {
-          this.curSceneIndex =this.curSceneIdx-1;
+        } else if(this.sceneList.length===0){
+          this.curSceneIdx=0;
+          this.currentScene=null;
+        }
+        else
+        {
+          this.curSceneIdx-=1;
+          this.currentScene=this.sceneList[this.curSceneIdx];
         }
       }
 
@@ -56,7 +61,24 @@ export class SceneManager
     {
         this.curSceneIndex=sceneIndex;
         this.sceneList=[...this.sceneList];
+        this.currentScene=this.sceneList[this.curSceneIdx];
     }
+
+
+    //functions to manage scene layers
+
+    getCurrentSelectedLayer()
+    {
+        if(this.currentScene.layerList.length===0)
+        {
+            return null;
+        }
+
+        return this.currentScene.layerList[this.selectedLayerIndex];
+    }
+
+
+
 
 
 

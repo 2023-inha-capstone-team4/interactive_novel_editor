@@ -6,26 +6,21 @@ body {
 	font-family: Arial, sans-serif;
 }
 
-.toolbox
-{
-	grid-area:'toolbox';
-}
-
-.canvas
-{
-	grid-area: 'canvas';
-}
-
 main
 {
 	margin:0;
 	padding:0;
 	min-height: 600px;
 	display:flex;
-	flex-direction: row;
+	flex-direction: column;
 	flex-wrap: nowrap;
-	
-	max-height:600px;
+
+}
+
+.top_contents
+{
+	display:flex;
+	flex-direction: row;
 }
 
 

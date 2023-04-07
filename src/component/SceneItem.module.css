@@ -4,6 +4,8 @@
     display:flex;
     justify-content: center;
     align-items:center;
+    max-width: 100%;
+    border-bottom:1px solid gainsboro;
 }
 
 .scene_item_box:hover
