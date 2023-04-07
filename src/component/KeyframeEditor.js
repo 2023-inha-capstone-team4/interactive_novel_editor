@@ -10,6 +10,8 @@ import stopButtonSrc from '../resources/images/buttons/stop_icon.png';
 import { MasterManagerContext } from '../lib/MasterManagerContext';
 import { KeyframeVerticalLine } from '../lib/KeyframeUI/KeyframeVerticalLine';
 import { Keyframe } from '../lib/Keyframe';
+import Vector2D from '../lib/Vector2D';
+import { CanvasButton } from '../lib/KeyframeUI/CanvasButton';
 
 
 
@@ -39,8 +41,35 @@ function KeyframeEditor()
     const horizontalLineThickness=1;
     const horizontalLineColumnAxisInterval=15;
 
+    var isMouseDragging=false;
+
 
     const KVline =new KeyframeVerticalLine();
+
+    function onClickPlay()
+    {
+        masterManager.play();
+    }
+
+    function onClickPause()
+    {
+        masterManager.pause();
+    }
+
+    function onClickStop()
+    {
+        masterManager.stop();
+    }
+
+
+
+    const playButton=new CanvasButton(new Vector2D(300,10), 20, 20, 'https://www.transparentpng.com/thumb/play-button/nHKpsQ-play-button-png.png', onClickPlay);
+    const pauseButton=new CanvasButton(new Vector2D(300+90,10), 20, 20, 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Eo_circle_red_pause.svg/2048px-Eo_circle_red_pause.svg.png',onClickPause);
+    const stopButton=new CanvasButton(new Vector2D(300+180,10), 20, 20, 'https://cdn-icons-png.flaticon.com/512/4029/4029011.png',onClickStop);
+    const UIButtons=[playButton,pauseButton,stopButton];
+
+    var textX=0;
+    var textY=0;
 
 
     function isRenderable()
@@ -48,6 +77,61 @@ function KeyframeEditor()
         if(canvasRef!=null) return true;
 
         return false;
+    }
+
+
+    function checkHover(mouseX, mouseY)
+    {
+        if(isMouseDragging) return;
+
+    }
+
+    function isIntersectCircularBtn(btn, mouseX, mouseY)
+    {
+        let distanceFromCenter=Math.sqrt((btn.position.x-mouseX)^2+(btn.position.y-mouseY)^2);
+
+        if(distanceFromCenter<=btn.xLength/2)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    function isIntersectSquareRange(offsetX, offsetY, xLength,yLength, mouseX, mouseY)
+    {
+        let left=offsetX;
+        let right=offsetX+xLength;
+        let top=offsetY;
+        let bottom=offsetY+yLength;
+
+        if(left<=mouseX && mouseX<=right && top<=mouseY && mouseY<=bottom)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+
+    function checkDragAndClick(mouseX, mouseY)
+    {
+        for(var i=0; i<UIButtons.length; i++)
+        {
+         let btn=UIButtons[i];
+         let isClicked=isIntersectCircularBtn(btn,mouseX, mouseY);
+
+            if(isClicked)
+            {
+                //btn.onClick();
+                //console.log('click!');
+            }
+        }
     }
 
     function render()
@@ -66,9 +150,9 @@ function KeyframeEditor()
         //render keyframes sequentially
         renderKeyframes(ctx);
 
-        //render horizontal scroll bar
-        //render horizontal scroll bar button
 
+        //render play buttons
+        renderPlayButtons(ctx);
     }
 
     function clearScreen()
@@ -106,8 +190,19 @@ function KeyframeEditor()
 
         let vlineXOffset=Math.min(horizontalLineLength,horizontalLineLength*progressRate);
 
+        if(KVline.isHover)
+        {
+            canvasContext.globalAlpha=0.5;
+        }
+
         canvasContext.fillRect(KVline.startXoffset+vlineXOffset,KVline.startYoffset, KVline.xLength, KVline.yLength);
         canvasContext.restore();
+    }
+
+    function updateUI()
+    {
+        checkHover();
+        checkDragAndClick();
     }
 
     function mainLoop()
@@ -120,6 +215,7 @@ function KeyframeEditor()
         if(!isRenderable()) return;
 
         clearScreen();
+        updateUI();
         render();
 
     }
@@ -187,9 +283,107 @@ function KeyframeEditor()
         }
     }
 
+    function renderPlayButtons(context)
+    {
+        UIButtons.forEach(btn => {
+            if(btn.isLoaded)
+            {
+                context.save();
+
+                if(btn.isHover)
+                    context.globalAlpha=0.6;
+                context.fillStyle='red';
+                //context.fillRect(btn.position.x, btn.position.y, btn.xLength, btn.yLength);
+                context.drawImage(btn.image,btn.position.x, btn.position.y,btn.xLength,btn.yLength);
+                context.restore();
+            }
+        });
+    }
+
+    function bindMouseEvents()
+    {
+        
+                //process mouse event
+                canvasRef.current.addEventListener('mousemove', function(event) {
+                    const rect = canvasRef.current.getBoundingClientRect();
+                    const mouseX = event.clientX - rect.left;
+                    const mouseY = event.clientY - rect.top;
+
+                                        //intersection 검출 keyframeverticalline
+                                        let progressRate=1.0-(numberCounts-masterManager.sceneTimer.getPlayTime())/parseFloat(numberCounts);
+                                        let vlineXOffset=Math.min(horizontalLineLength,horizontalLineLength*progressRate);
+                    
+                                        let left=KVline.startXoffset+vlineXOffset-3;
+                                        let right=KVline.startXoffset+vlineXOffset+KVline.xLength+3;
+                                        let top=KVline.startYoffset;
+                                        let bottom=KVline.startYoffset+KVline.yLength;
+                    
+                                        if(left<=mouseX && mouseX <=right && top<=mouseY && mouseY<=bottom)
+                                        {
+                                            console.log('kv line HOVER!!');
+                                            KVline.isHover=true;
+                                        }
+                                        else
+                                        {
+                                            KVline.isHover=false;
+                                        }
+
+                    
+                  });
+            
+                  canvasRef.current.addEventListener('mouseup', () => {
+                    isMouseDragging=false;
+                  });
+            
+            
+                  canvasRef.current.addEventListener('mousedown', (e) => {
+                    const rect = canvasRef.current.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+
+                    for(var i=0; i<UIButtons.length; i++)
+                    {
+                     let btn=UIButtons[i];
+                     let isClicked=isIntersectSquareRange(btn.position.x, btn.position.y, btn.xLength,btn.yLength,mouseX, mouseY);
+                     console.log(`${btn.position.x} , ${btn.position.y}`);
+            
+                        if(isClicked)
+                        {
+                            console.log("click!");
+                            btn.onClick();
+                        }
+                    }
+
+                    //intersection 검출 keyframeverticalline
+                    let progressRate=1.0-(numberCounts-masterManager.sceneTimer.getPlayTime())/parseFloat(numberCounts);
+                    let vlineXOffset=Math.min(horizontalLineLength,horizontalLineLength*progressRate);
+
+                    let left=KVline.startXoffset+vlineXOffset-3;
+                    let right=KVline.startXoffset+vlineXOffset+KVline.xLength+3;
+                    let top=KVline.startYoffset;
+                    let bottom=KVline.startYoffset+KVline.yLength;
+
+                    if(left<=mouseX && mouseX <=right && top<=mouseY && mouseY<=bottom)
+                    {
+                        console.log('kv line clicked!');
+                        KVline.isMouseDragging=true;
+                    }
+                    else
+                    {
+                        
+                    }
+
+
+                  
+                  });
+    }
+
     useEffect(
         ()=>{
 
+
+
+            bindMouseEvents();
             mainLoop();
 
 

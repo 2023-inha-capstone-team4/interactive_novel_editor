@@ -34,9 +34,8 @@ function ScenesListView()
     useEffect(
         ()=>{
             setSceneList([...masterManager.sceneManager.sceneList]);
-            setSelectedScene(masterManager.sceneManager.getCurrentScene());
         }
-    ,[masterManager.sceneManager.sceneList, masterManager.sceneManager.curSceneIdx]);
+    ,[masterManager.sceneManager.sceneList, selectedScene]);
 
     function selectScene(index)
     {
@@ -99,7 +98,7 @@ function ScenesListView()
                 sceneList.map((sceneItem, index, array)=>{
 
                     return <SceneItem key={index} scene={sceneItem} index={index} style={{
-                        backgroundColor: selectedScene==masterManager.sceneManager.sceneList[index]? 'pink' : 'azure',
+                        backgroundColor: selectedScene===masterManager.sceneManager.sceneList[index]? 'pink' : 'azure',
 
                     }} onClick={()=>{selectScene(index)}}></SceneItem>
                 })

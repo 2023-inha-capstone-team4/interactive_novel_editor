@@ -127,7 +127,7 @@ export class SceneRenderer
 
 
 
-            if(keyframes.length===1) //1개의 키프레임만 있을때, 해당 키프레임으로 렌더링한다.
+            if(keyframes.length===1 || playTime<=0) //1개의 키프레임만 있을때, 해당 키프레임으로 렌더링한다.
             {
                 this.renderLayerByKeyframe(targetCanvas, targetLayer, firstKeyframe);
             } //마지막 키프레임 시간을 지났고, 반복하지 않을 때, 마지막 키프레임으로 렌더링한다.

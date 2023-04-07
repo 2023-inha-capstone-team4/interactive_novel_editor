@@ -31,7 +31,30 @@ function LayerEditor()
     function selectLayer(index)
     {
         setSelectedLayer(masterManager.sceneManager.getCurrentScene().layerList[index]);
+        masterManager.sceneManager.getCurrentScene().currentLayerIndex=index;
     }
+
+    function addImageLayer()
+    {
+
+    }
+
+    function addTextLayer()
+    {
+
+    }
+
+    function addEffectLayer()
+    {}
+
+    function copyCurrentLayer()
+    {}
+
+    function changeCurrentLayerName()
+    {}
+
+    function deleteCurrentLayer()
+    {}
 
 
     return <>
@@ -56,12 +79,12 @@ function LayerEditor()
                 }
         </div>
         <MenuBar>
-            <MenuItem imageSrc={imgIconSrc} onClick={()=>{}}></MenuItem>
-                <MenuItem imageSrc={TIconSrc} onClick={()=>{}}></MenuItem>
-                <MenuItem imageSrc={fxIconSrc} onClick={()=>{}}></MenuItem>
-                <MenuItem imageSrc={copyIconSrc} onClick={()=>{}}></MenuItem>
-                <MenuItem imageSrc={abcIconSrc} onClick={()=>{}}></MenuItem>
-                <MenuItem imageSrc={binIconSrc} onClick={()=>{}}></MenuItem>
+            <MenuItem imageSrc={imgIconSrc} onClick={()=>{addImageLayer()}}></MenuItem>
+                <MenuItem imageSrc={TIconSrc} onClick={()=>{addTextLayer()}}></MenuItem>
+                <MenuItem imageSrc={fxIconSrc} onClick={()=>{addEffectLayer()}}></MenuItem>
+                <MenuItem imageSrc={copyIconSrc} onClick={()=>{copyCurrentLayer()}}></MenuItem>
+                <MenuItem imageSrc={abcIconSrc} onClick={()=>{changeCurrentLayerName()}}></MenuItem>
+                <MenuItem imageSrc={binIconSrc} onClick={()=>{deleteCurrentLayer()}}></MenuItem>
         </MenuBar>
     </section>
     </>;
