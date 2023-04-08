@@ -20,7 +20,6 @@ function App() {
 			<div className="top_contents">
 				<ScenesListView/>
 				<MasterCanvas />
-				<LayerEditor/>
 				</div>
 				<KeyframeEditor/>
 		</main>

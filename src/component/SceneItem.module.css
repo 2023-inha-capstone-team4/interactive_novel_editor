@@ -10,6 +10,7 @@
 
 .scene_item_box:hover
 {
+    background-color: azure;
     cursor:pointer;
 }
 

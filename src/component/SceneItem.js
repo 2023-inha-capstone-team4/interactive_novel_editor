@@ -5,7 +5,6 @@ import styles from './SceneItem.module.css';
 function SceneItem(props)
 {
     const [scene, setScene] = useState(props.scene);
-    const [isSelected, setIsSelected]=useState(props.isSelected);
     const [index, setIndex]=useState(props.index);
 
     const masterManager=useContext(MasterManagerContext);
@@ -15,7 +14,7 @@ function SceneItem(props)
 
 
     return (
-        <div className={`${isSelected? styles.scene_item_box_selected : styles.scene_item_box}`} style={props.style} draggable="true" onClick={props.onClick}>
+        <div className={styles.scene_item_box} style={{backgroundColor:props.isSelected?"pink":null }} draggable="true" onClick={props.onClick}>
             <div className='scene_name'>{scene.name}</div>
         </div>
     );

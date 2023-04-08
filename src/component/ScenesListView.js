@@ -14,6 +14,7 @@ import copyIconSrc from '../resources/images/buttons/copy_icon.png';
 import binIconSrc from '../resources/images/buttons/bin_icon.png';
 
 import Modal from './Modal';
+import LayerEditor from './LayerEditor';
 
 
 function ScenesListView()
@@ -22,33 +23,33 @@ function ScenesListView()
     let [sceneList, setSceneList] = useState([]);
     const masterManager=useContext(MasterManagerContext);
 
-    const [selectedScene, setSelectedScene] =useState(masterManager.sceneManager.getCurrentScene());
+    const [selectedSceneIndex, setSelectedSceneIndex] =useState(masterManager.sceneManager.curSceneIdx);
     
     const [isOpenChangeNameModal, setOpenChangeNameModal] = useState(false);
 
     const [nameText, setNameText] = useState("");
 
 
-
-
-    useEffect(
-        ()=>{
-            setSceneList([...masterManager.sceneManager.sceneList]);
-        }
-    ,[masterManager.sceneManager.sceneList, selectedScene]);
-
     function selectScene(index)
     {
-        masterManager.sceneManager.selectScene(index);
-        setSelectedScene(masterManager.sceneManager.getCurrentScene());
+        if(masterManager.sceneManager.curSceneIdx===index) return;
+
+
+        masterManager.sceneManager.curSceneIdx=index;
+        setSelectedSceneIndex(masterManager.sceneManager.curSceneIdx);
+        setSceneList([...masterManager.sceneManager.sceneList]);
+
+        masterManager.stop();
     }
 
 
     function createNewScene()
     {
         masterManager.sceneManager.createNewScene();
-        selectScene(masterManager.sceneManager.sceneList.length-1);
+        setSelectedSceneIndex(masterManager.sceneManager.curSceneIdx);
         setSceneList([...masterManager.sceneManager.sceneList]);
+
+        masterManager.stop();
     }
 
     function openChangeSceneNameModal()
@@ -88,6 +89,12 @@ function ScenesListView()
         selectScene(masterManager.sceneManager.curSceneIdx);
     }
 
+    useEffect(() => {
+        setSceneList([...masterManager.sceneManager.sceneList]);
+    
+    }, [masterManager.sceneManager.sceneList,selectedSceneIndex]);
+    
+
 
     return (<>
         <section className={styles.scene_view}>
@@ -97,10 +104,7 @@ function ScenesListView()
             {
                 sceneList.map((sceneItem, index, array)=>{
 
-                    return <SceneItem key={index} scene={sceneItem} index={index} style={{
-                        backgroundColor: selectedScene===masterManager.sceneManager.sceneList[index]? 'pink' : 'azure',
-
-                    }} onClick={()=>{selectScene(index)}}></SceneItem>
+                    return <SceneItem key={index} scene={sceneItem} index={index} isSelected={(selectedSceneIndex===index)} onClick={()=>{selectScene(index)}}></SceneItem>
                 })
             }
             </div>
@@ -113,6 +117,7 @@ function ScenesListView()
                 <MenuItem imageSrc={binIconSrc} onClick={deleteCurrentScene}></MenuItem>
             </MenuBar>
         </section>
+        <LayerEditor currentSceneIndex={selectedSceneIndex}/>
         
         {
             //change name modal

@@ -15,23 +15,23 @@ import { MasterManagerContext } from '../lib/MasterManagerContext';
 
 import MenuItem from './menuItem';
 
-function LayerEditor()
+function LayerEditor(props)
 {
 
     const masterManager=useContext(MasterManagerContext);
-    const [layers, setLayers] = useState([]);
+    const [currentLayerList, setLayerList] = useState([]);
 
-    const [selectedLayer, setSelectedLayer] = useState(null);
+    const [selectedLayerIndex, setSelectedLayerIndex] = useState(0);
 
     useEffect(()=>{
-        setLayers(masterManager.sceneManager.getCurrentScene().layerList);
-    },[]);
+        setLayerList(masterManager.sceneManager.getCurrentScene().layerList);
+    },[masterManager.curSceneIdx, props.currentSceneIndex]);
 
 
     function selectLayer(index)
     {
-        setSelectedLayer(masterManager.sceneManager.getCurrentScene().layerList[index]);
-        masterManager.sceneManager.getCurrentScene().currentLayerIndex=index;
+        setSelectedLayerIndex(index);
+        masterManager.sceneManager.currentLayerIndex=index;
     }
 
     function addImageLayer()
@@ -62,13 +62,8 @@ function LayerEditor()
             <div className={styles.layer_editor_title} >레이어</div>
             <div className={styles.layer_list}>
                 {
-                    layers.map((layer, index, arr)=>{
-                        return <LayerItem key={index} 
-                        
-                        style={{
-                            backgroundColor: selectedLayer==masterManager.sceneManager.getCurrentScene().layerList[index]? 'pink' : 'azure',
-    
-                        }}
+                    currentLayerList.map((layer, index, arr)=>{
+                        return <LayerItem key={index} isSelected={(selectedLayerIndex===index)}         
                         
                         layer={layer} onClick={()=>{
 

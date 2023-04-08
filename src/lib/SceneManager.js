@@ -5,8 +5,7 @@ export class SceneManager
     constructor()
     {
         this.sceneList=[];
-        this.currentScene= new Scene();
-        this.sceneList.push(this.currentScene);
+        this.sceneList.push(new Scene());
 
         this.curSceneIdx=0;
 
@@ -20,7 +19,7 @@ export class SceneManager
     {
         if(this.sceneList.length===0) return null;
 
-        return this.currentScene;
+        return this.sceneList[this.curSceneIdx];
     }
 
 
@@ -34,8 +33,8 @@ export class SceneManager
         let newScene=new Scene();
         this.sceneList=[...this.sceneList,newScene];
         
+        this.curSceneIdx=this.sceneList.length-1;
         this.selectScene(this.sceneList.length-1);
-        this.currentScene=newScene;
     }
 
     removeSelectedScene() {
@@ -48,20 +47,16 @@ export class SceneManager
           this.curSceneIndex = 0;
         } else if(this.sceneList.length===0){
           this.curSceneIdx=0;
-          this.currentScene=null;
         }
         else
         {
           this.curSceneIdx-=1;
-          this.currentScene=this.sceneList[this.curSceneIdx];
         }
       }
 
     selectScene(sceneIndex)
     {
         this.curSceneIndex=sceneIndex;
-        this.sceneList=[...this.sceneList];
-        this.currentScene=this.sceneList[this.curSceneIdx];
     }
 
 
@@ -69,12 +64,10 @@ export class SceneManager
 
     getCurrentSelectedLayer()
     {
-        if(this.currentScene.layerList.length===0)
-        {
-            return null;
-        }
+      if(this.sceneList.length===0) return null;
+      if(this.sceneList[this.curSceneIdx].layerList.length===0) return null;
 
-        return this.currentScene.layerList[this.selectedLayerIndex];
+        return this.sceneList[this.curSceneIdx].layerList[this.selectedLayerIndex];
     }
 
 

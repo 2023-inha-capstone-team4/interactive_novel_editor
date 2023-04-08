@@ -65,16 +65,17 @@ export class MasterManager
 
         this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
 
-        // this.txtLayer=new TextLayer();
-        // this.txtLayer.setText("잘가");
-        // this.txtLayer.fontType="Sans Serif";
-        // this.txtLayer.repeatType="forward";
-        // this.txtLayer.name="잘가";
-        // this.txtLayer.addKeyframe(new TextKeyframe(0,new Vector2D(400,300), new Vector2D(1,1), 0, 1, {red:255, green:255, blue:255}));
-        // this.txtLayer.addKeyframe(new TextKeyframe(0.75,new Vector2D(800,300), new Vector2D(3,3), 0, 0, {red:255, green:124, blue:0}));
-        // this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
+        this.txtLayer=new TextLayer();
+        this.txtLayer.setText("잘가");
+        this.txtLayer.fontType="Sans Serif";
+        this.txtLayer.repeatType="forward";
+        this.txtLayer.name="잘가";
+        this.txtLayer.addKeyframe(new TextKeyframe(0,new Vector2D(400,300), new Vector2D(1,1), 0, 1, {red:255, green:255, blue:255}));
+        this.txtLayer.addKeyframe(new TextKeyframe(0.75,new Vector2D(800,300), new Vector2D(3,3), 0, 0, {red:255, green:124, blue:0}));
+        this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
 
-        // //scene 2번째 test code
+        //scene 2번째 test code
+        // this.sceneManager.createNewScene();
         // this.sceneManager.selectScene(1);
         // this.imageLayer=new ImageLayer("https://item.kakaocdn.net/do/b0de2adb4008db8aec4d0616b9a04e0deffd194bae87d73dd00522794070855d");
         // this.imageLayer.addKeyframe(new Keyframe(0,new Vector2D(400,300), new Vector2D(1,1),0,1));

@@ -9,9 +9,11 @@ import pauseButtonSrc from '../resources/images/buttons/pause_icon.png';
 import stopButtonSrc from '../resources/images/buttons/stop_icon.png';
 import { MasterManagerContext } from '../lib/MasterManagerContext';
 import { KeyframeVerticalLine } from '../lib/KeyframeUI/KeyframeVerticalLine';
-import { Keyframe } from '../lib/Keyframe';
+import { Keyframe, TextKeyframe } from '../lib/Keyframe';
 import Vector2D from '../lib/Vector2D';
 import { CanvasButton } from '../lib/KeyframeUI/CanvasButton';
+import { isEditable } from '@testing-library/user-event/dist/utils';
+import Modal from './Modal';
 
 
 
@@ -27,21 +29,25 @@ function KeyframeEditor()
     const masterManager=useContext(MasterManagerContext);
 
 
-    const canvasWidth=800;
+    const [canvasWidth, setCanvasWidth]=useState(window.innerWidth-20);
     const canvasHeight=150;
-
-    const numberingStartOffsetX=20;
-    const numberingIntervalOffsetX=50;
-    const numberCounts=15;
-    const numberingEndOffsetX=numberingStartOffsetX+numberingIntervalOffsetX*(numberCounts-1);
 
     const horizontalLineStartOffsetX=20;
     const horizontalLineStartOffsetY=60;
-    const horizontalLineLength=750;
+    const horizontalLineLength=1000;
     const horizontalLineThickness=1;
     const horizontalLineColumnAxisInterval=15;
 
+    const numberingStartOffsetX=horizontalLineStartOffsetX;
+    const numberCounts=15;
+    const numberingIntervalOffsetX=horizontalLineLength/numberCounts;
+    const numberingEndOffsetX=numberingStartOffsetX+numberingIntervalOffsetX*(numberCounts-1);
+
     var isMouseDragging=false;
+
+
+    const [keyframeEditModalOpened, setKeyframeEditModalOpen] = useState(false);
+    const [keyframeDeleteModalOpened, setKeyframeDeleteModalOpen] = useState(false);
 
 
     const KVline =new KeyframeVerticalLine();
@@ -61,12 +67,50 @@ function KeyframeEditor()
         masterManager.stop();
     }
 
+    function onClickAddKeyframe()
+    {
+        //현재 상태가 pause 또는 stop이 아니면, 리턴한다.
+
+        //현재 상태가 pause이고,
+        //playTime이 가리키고 있는 곳에 keyframe이 없다면
+        //playTime이 0이면, next keyframe이 있는지 검사하고
+        //있으면 next keyframe과 같은 값을 갖도록 키프레임을 생성한다.
+        //없으면 디폴트 값 키프레임을 생성한다.
+        //default keyframe : position: masterManager canvas center, scale (1,1), rotation: zero, image_fade_alpha:1.0, 
+        //textkeyframe일 때 color={red:128, green:128, blue: 128}
+
+        //현재 playTime이 0이 아니면
+            //lastKeyframe.timeLabel보다 playTime 값이 클 때
+            //lastKeyframe과 동일한 값을 갖는 keyframe을 생성한다.
+            
+            //어떤 두 키프레임의 사이에 playTime이 위치할 때는
+            //두 키프레임을 linear interpolation 하는 값으로 키프레임을 생성한다.
+    }
+
+    function onClickDeleteKeyframe()
+    {
+        setKeyframeDeleteModalOpen(true);
+        //정말로 선택한 키프레임을 삭제하시겠습니까? 창을 띄우고
+        //예 또는 아니오 선택을 할 수 있도록한다.
+        //예를 선택하면 => 해당 키프레임을 삭제한다.
+        //아니오를 선택하면 => 모달창이 꺼진다.
+    }
+
+    function onClickEditKeyframe()
+    {
+        //현재 키프레임 값을 편집할 수 있는 모달 창을 출력한다.
+        setKeyframeEditModalOpen(true);
+    }
 
 
-    const playButton=new CanvasButton(new Vector2D(300,10), 20, 20, 'https://www.transparentpng.com/thumb/play-button/nHKpsQ-play-button-png.png', onClickPlay);
+
+    const playButton=new CanvasButton(new Vector2D(300,10), 20, 20, 'https://static.vecteezy.com/system/resources/previews/010/151/781/non_2x/play-button-icon-sign-design-free-png.png', onClickPlay);
     const pauseButton=new CanvasButton(new Vector2D(300+90,10), 20, 20, 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Eo_circle_red_pause.svg/2048px-Eo_circle_red_pause.svg.png',onClickPause);
     const stopButton=new CanvasButton(new Vector2D(300+180,10), 20, 20, 'https://cdn-icons-png.flaticon.com/512/4029/4029011.png',onClickStop);
-    const UIButtons=[playButton,pauseButton,stopButton];
+    const addKeyframeButton=new CanvasButton(new Vector2D(40,10), 20, 20, 'https://pngimg.com/d/plus_PNG109.png',onClickAddKeyframe);
+    const EditKeyframeButton=new CanvasButton(new Vector2D(100,10), 20, 20, 'https://iconsplace.com/wp-content/uploads/_icons/ff0000/256/png/edit-property-icon-14-256.png',onClickEditKeyframe);
+    const deleteKeyframeButton=new CanvasButton(new Vector2D(160,10), 20, 20, 'https://cdn-icons-png.flaticon.com/512/3687/3687412.png',onClickDeleteKeyframe);
+    const UIButtons=[playButton,pauseButton,stopButton, addKeyframeButton,EditKeyframeButton,deleteKeyframeButton];
 
     var textX=0;
     var textY=0;
@@ -86,11 +130,11 @@ function KeyframeEditor()
 
     }
 
-    function isIntersectCircularBtn(btn, mouseX, mouseY)
+    function isIntersectCircularBtn(centerPosition, radius, mouseX, mouseY)
     {
-        let distanceFromCenter=Math.sqrt((btn.position.x-mouseX)^2+(btn.position.y-mouseY)^2);
+        let distanceFromCenter=Math.sqrt((centerPosition.x-mouseX)^2+(centerPosition.y-mouseY)^2);
 
-        if(distanceFromCenter<=btn.xLength/2)
+        if(distanceFromCenter<=radius/2.0)
         {
             return true;
         }
@@ -253,12 +297,13 @@ function KeyframeEditor()
     function renderKeyframes(context)
     {
         //get Keyframe list
+        if(masterManager.sceneManager.getCurrentScene()==null) return;
         if(masterManager.sceneManager.getCurrentScene().layerList.length===0) return;
 
         let currentLayerIndex= masterManager.sceneManager.currentLayerIndex;
         let keyframes=masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex].getKeyframes();
 
-        
+        //Render Representative keyframe clicker
         for(var i=0; i<keyframes.length; i++)
         {
             let progressRate =1.0-(numberCounts-keyframes[i].timeLabel)/parseFloat(numberCounts);
@@ -272,15 +317,133 @@ function KeyframeEditor()
             context.arc(horizontalLineStartOffsetX+keyframeXOffset, horizontalLineStartOffsetY, 5, 0, 2 * Math.PI);
             
             //if not hover, colored blue
-            context.fillStyle = 'blue';
+            if(keyframes[i].isSelected)
+            {
+                context.fillStyle = 'pink';
 
-            //if hover, colored yellow
-
-            //if selected, colored red
+            }
+            else if(keyframes[i].isHover)
+            {
+                context.fillStyle = 'yellow';
+            }
+            else
+            {
+                context.fillStyle = 'blue';
+            }
             context.fill();
             context.restore();
-
         }
+
+        for(var i=0; i<keyframes.length; i++)
+        {
+            //첫번째 키프레임이거나, 이전 키프레임과 값이 동일하면
+            //그레이 도트를 출력한다.
+            //color값의 경우, 해당 color 값을 그대로 색상으로 하여 dot로 출력한다.
+            let progressRate =1.0-(numberCounts-keyframes[i].timeLabel)/parseFloat(numberCounts);
+
+            let keyframeXOffset= horizontalLineLength*progressRate;
+
+
+            
+            var prevKeyframe=null;
+            var currentKeyframe=keyframes[i];
+
+            if(keyframes.length>=2 && i>=1)
+            {
+                prevKeyframe=keyframes[i-1];
+            }
+
+            if(i===0)
+            {
+               for(var attr_idx=0; attr_idx<4 ; attr_idx++)
+               {
+                     //render
+                context.save();
+                context.globalAlpha=1.0;
+                context.beginPath();
+                context.arc(horizontalLineStartOffsetX+keyframeXOffset, horizontalLineStartOffsetY+horizontalLineColumnAxisInterval*(attr_idx+1), 5, 0, 2 * Math.PI);
+                context.fillStyle = 'gray';
+                context.fill();
+                context.restore();
+               }
+            }
+            else
+            {
+                   for(var attr_idx=0; attr_idx<4 ; attr_idx++)
+                   {
+                    var isValueEqual=false;
+
+                    switch(attr_idx)
+                    {
+                        case 0:
+                            if(Math.abs(prevKeyframe.position.x-currentKeyframe.position.x)<0.00001 && Math.abs(prevKeyframe.position.y-currentKeyframe.position.x)<0.00001)
+                            {
+                                isValueEqual=true;
+                            }
+                            else
+                            {
+                                isValueEqual=false;
+                            }
+
+                            break;
+
+                        case 1:
+                            if(Math.abs(prevKeyframe.scale.x-currentKeyframe.scale.x)<0.00001 && Math.abs(prevKeyframe.scale.y-currentKeyframe.scale.x)<0.00001)
+                            {
+                                isValueEqual=true;
+                            }
+                            else
+                            {
+                                isValueEqual=false;
+                            }
+                            break;
+
+                        case 2:
+                            if(Math.abs(prevKeyframe.rotation-currentKeyframe.rotation)<0.00001)
+                            {
+                                isValueEqual=true;
+                            }
+                            else
+                            {
+                                isValueEqual=false;
+                            }
+                            break;
+
+                        case 3:
+                            if(Math.abs(prevKeyframe.image_fade_alpha-currentKeyframe.image_fade_alpha)<0.00001)
+                            {
+                                isValueEqual=true;
+                            }
+                            else
+                            {
+                                isValueEqual=false;
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+
+
+                         //render
+                    context.save();
+                    context.globalAlpha=1.0;
+                    context.beginPath();
+                    context.arc(horizontalLineStartOffsetX+keyframeXOffset, horizontalLineStartOffsetY+horizontalLineColumnAxisInterval*(attr_idx+1), 5, 0, 2 * Math.PI);
+                    if(isValueEqual) //prevFrame의 attribute 값과 같다면, 그레이로 출력한다.
+                    {
+                        context.fillStyle = 'gray';
+                    }
+                    else //prevFrame의 attribute 값과 다르다면, 초록색으로 출력한다.
+                    {
+                        context.fillStyle='green';
+                    }
+                    context.fill();
+                    context.restore();
+                   }
+            }
+        }
+
     }
 
     function renderPlayButtons(context)
@@ -306,33 +469,104 @@ function KeyframeEditor()
                 //process mouse event
                 canvasRef.current.addEventListener('mousemove', function(event) {
                     const rect = canvasRef.current.getBoundingClientRect();
-                    const mouseX = event.clientX - rect.left;
-                    const mouseY = event.clientY - rect.top;
+                    const mouseX = (event.clientX - rect.left);
+                    const mouseY = (event.clientY - rect.top);
 
-                                        //intersection 검출 keyframeverticalline
-                                        let progressRate=1.0-(numberCounts-masterManager.sceneTimer.getPlayTime())/parseFloat(numberCounts);
-                                        let vlineXOffset=Math.min(horizontalLineLength,horizontalLineLength*progressRate);
+
+                    //intersection 검출 UI Buttons
+                    UIButtons.forEach((btn, index, array)=>{
+
+                        if(isIntersectSquareRange(btn.position.x, btn.position.y, btn.xLength, btn.yLength,mouseX, mouseY))
+                        {
+                            btn.isHover=true;
+                        }
+                        else
+                        {
+                            btn.isHover=false;
+                        }
+
+
+
+                    });
+
+                    //intersection 검출 keyframeverticalline
+                    let progressRate=1.0-(numberCounts-masterManager.sceneTimer.getPlayTime())/parseFloat(numberCounts);
+                    let vlineXOffset=Math.min(horizontalLineLength,horizontalLineLength*progressRate);
                     
-                                        let left=KVline.startXoffset+vlineXOffset-3;
-                                        let right=KVline.startXoffset+vlineXOffset+KVline.xLength+3;
-                                        let top=KVline.startYoffset;
-                                        let bottom=KVline.startYoffset+KVline.yLength;
+                    let left=KVline.startXoffset+vlineXOffset-3;
+                    let right=KVline.startXoffset+vlineXOffset+KVline.xLength+3;
+                     let top=KVline.startYoffset;
+                    let bottom=KVline.startYoffset+KVline.yLength;
                     
-                                        if(left<=mouseX && mouseX <=right && top<=mouseY && mouseY<=bottom)
-                                        {
-                                            console.log('kv line HOVER!!');
-                                            KVline.isHover=true;
-                                        }
-                                        else
-                                        {
-                                            KVline.isHover=false;
-                                        }
+                    if(left<=mouseX && mouseX <=right && top<=mouseY && mouseY<=bottom)
+                    {
+                        console.log('kv line HOVER!!');
+                        KVline.isHover=true;
+                        return;
+                    }
+                    else
+                    {
+                        KVline.isHover=false;
+                    }
+
+
+                    if(KVline.isMouseDragging)
+                    {
+                        console.log('dragging . . .');
+                        masterManager.pause();
+
+                        if(mouseX<=horizontalLineStartOffsetX-25)
+                        {
+                            masterManager.sceneTimer.setPlayTime(0);
+                            console.log('playtime 0');
+                        }
+                        else if(horizontalLineStartOffsetX+horizontalLineLength<=mouseX)
+                        {
+                            masterManager.sceneTimer.setPlayTime(numberCounts);
+                        }
+                        else
+                        {
+                            let progressRate=mouseX/parseFloat(horizontalLineStartOffsetX+ horizontalLineLength);
+                            
+                            masterManager.sceneTimer.setPlayTime(progressRate*numberCounts);
+                        }
+                    }
+                    
+                    //get Keyframe list
+                    if(masterManager.sceneManager.getCurrentScene()==null) return;
+                    if(masterManager.sceneManager.getCurrentScene().layerList.length===0) return;
+
+                    let currentLayerIndex= masterManager.sceneManager.currentLayerIndex;
+                    let keyframes=masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex].getKeyframes();
+
+                    for(var i=0; i<keyframes.length; i++)
+                    {
+                        let keyframe=keyframes[i];
+
+                        let progressRate =1.0-(numberCounts-keyframe.timeLabel)/parseFloat(numberCounts);
+
+                        let keyframeXOffset= horizontalLineLength*progressRate;
+
+                        let offsetX=horizontalLineStartOffsetX+keyframeXOffset;
+                        let offsetY=horizontalLineStartOffsetY;
+
+                        if(isIntersectSquareRange(offsetX-5.0,offsetY-5.0,10.0,10.0,mouseX, mouseY))
+                        {
+                            keyframe.isHover=true;
+                        }
+                        else
+                        {
+                            keyframe.isHover=false;
+                        }
+
+                    }
 
                     
                   });
             
                   canvasRef.current.addEventListener('mouseup', () => {
                     isMouseDragging=false;
+                    KVline.isMouseDragging=false;
                   });
             
             
@@ -349,10 +583,13 @@ function KeyframeEditor()
             
                         if(isClicked)
                         {
-                            console.log("click!");
                             btn.onClick();
+                            return;
                         }
                     }
+
+
+
 
                     //intersection 검출 keyframeverticalline
                     let progressRate=1.0-(numberCounts-masterManager.sceneTimer.getPlayTime())/parseFloat(numberCounts);
@@ -365,18 +602,47 @@ function KeyframeEditor()
 
                     if(left<=mouseX && mouseX <=right && top<=mouseY && mouseY<=bottom)
                     {
-                        console.log('kv line clicked!');
                         KVline.isMouseDragging=true;
+                        return;
                     }
                     else
                     {
                         
                     }
 
+                    let keyframes=masterManager.sceneManager.getCurrentScene().layerList[masterManager.sceneManager.currentLayerIndex].getKeyframes();
+                    //intersection 검출 for each keyframe
+                    for(var i=0; i<keyframes.length; i++)
+                    {
+                        let progressRate =1.0-(numberCounts-keyframes[i].timeLabel)/parseFloat(numberCounts);
+
+                        let keyframeXOffset= horizontalLineLength*progressRate;
+
+                        if(isIntersectSquareRange(horizontalLineStartOffsetX+keyframeXOffset-5.0, horizontalLineStartOffsetY-5.0,10,10,mouseX, mouseY))
+                        {
+                            keyframes[i].isSelected=true;
+                        }
+                        else
+                        {
+                            keyframes[i].isSelected=false;
+                        }
+                    }
+
+
 
                   
                   });
     }
+
+    useEffect(() => {
+        function handleResize() {
+          setCanvasWidth(window.innerWidth-20);
+        }
+    
+        window.addEventListener('resize', handleResize);
+    
+        return () => window.removeEventListener('resize', handleResize);
+      }, []);
 
     useEffect(
         ()=>{
@@ -394,7 +660,45 @@ function KeyframeEditor()
 
 
     return <>
-        <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight}></canvas>
+        <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} className={styles.keyframe_editor_canvas}></canvas>
+        {keyframeEditModalOpened?
+            <Modal>
+                <div>Keyframe attributes</div>
+                
+                <div>
+                    <button onClick={()=>{setKeyframeEditModalOpen(false)}}>확인</button>
+                    <button onClick={()=>{setKeyframeEditModalOpen(false)}}>취소</button>
+                </div>
+
+            </Modal>
+            :null
+        }
+        {keyframeDeleteModalOpened?
+            <Modal>
+                <div>정말로 해당 키프레임을 삭제하시겠습니까</div>
+                
+                <div>
+                    <button onClick={()=>{
+                        var currentLayer=masterManager.sceneManager.getCurrentScene().layerList[masterManager.sceneManager.currentLayerIndex];
+                        var keyframes=currentLayer.getKeyframes();
+                        for(var i=0; i<keyframes.length; i++)
+                        {
+                            if(keyframes[i].isSelected)
+                            {
+                                console.log('keyframe removed');
+                                currentLayer.removeKeyframe(i);
+                                break;
+                            }
+                        }
+                        
+                        
+                        setKeyframeDeleteModalOpen(false);}}>확인</button>
+                    <button onClick={()=>{setKeyframeDeleteModalOpen(false);}}>취소</button>
+                </div>
+
+            </Modal>
+            :null
+        }
     </>;
 }
 

@@ -9,6 +9,9 @@ export class Keyframe
         this.scale=scale;
         this.rotation=rotation;
         this.image_fade_alpha=image_fade_alpha;
+
+        this.isHover=false;
+        this.isSelected=false;
     }
 
     changeTimeLabel(toTime)
@@ -76,7 +79,10 @@ export class Keyframe
     }
 }
 
-
+/**
+ * 폰트 색상인 Color를 추가함.
+ * 
+ * * */
 export class TextKeyframe extends Keyframe
 {
     constructor(timeLabel, position, scale,rotation,image_fade_alpha, color)
