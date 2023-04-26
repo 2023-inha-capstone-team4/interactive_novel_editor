@@ -14,6 +14,7 @@ import Vector2D from '../lib/Vector2D';
 import { CanvasButton } from '../lib/KeyframeUI/CanvasButton';
 import { isEditable } from '@testing-library/user-event/dist/utils';
 import Modal from './Modal';
+import KeyframeModal from './modal_editors/KeyframeModal';
 
 
 
@@ -662,15 +663,7 @@ function KeyframeEditor()
     return <>
         <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} className={styles.keyframe_editor_canvas}></canvas>
         {keyframeEditModalOpened?
-            <Modal>
-                <div>Keyframe attributes</div>
-                
-                <div>
-                    <button onClick={()=>{setKeyframeEditModalOpen(false)}}>확인</button>
-                    <button onClick={()=>{setKeyframeEditModalOpen(false)}}>취소</button>
-                </div>
-
-            </Modal>
+            <KeyframeModal OnOkClick={()=>{setKeyframeEditModalOpen(false)}} OnCancelClick={()=>{setKeyframeEditModalOpen(false)}}/>
             :null
         }
         {keyframeDeleteModalOpened?
@@ -685,7 +678,6 @@ function KeyframeEditor()
                         {
                             if(keyframes[i].isSelected)
                             {
-                                console.log('keyframe removed');
                                 currentLayer.removeKeyframe(i);
                                 break;
                             }
