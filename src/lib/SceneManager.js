@@ -35,6 +35,8 @@ export class SceneManager
         
         this.curSceneIdx=this.sceneList.length-1;
         this.selectScene(this.sceneList.length-1);
+
+        
     }
 
     removeSelectedScene() {

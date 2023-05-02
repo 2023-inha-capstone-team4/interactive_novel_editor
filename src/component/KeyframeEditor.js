@@ -26,6 +26,9 @@ function KeyframeEditor()
 
     const canvasRef=useRef(null);
 
+    /**
+     * frame per second
+     */
     const FPS=30.0;
     const masterManager=useContext(MasterManagerContext);
 
@@ -33,10 +36,25 @@ function KeyframeEditor()
     const [canvasWidth, setCanvasWidth]=useState(window.innerWidth-20);
     const canvasHeight=150;
 
+    /**
+     * 키프레임 가로선 왼쪽 시작 오프셋 (x좌표)
+     */
     const horizontalLineStartOffsetX=20;
+    /**
+     * 키프레임 가로선 왼쪽 시작 오프셋 (y좌표)
+     */
     const horizontalLineStartOffsetY=60;
+    /**
+    * 키프레임 재생기 가로선 길이 (px)
+    */
     const horizontalLineLength=1000;
+    /**
+     * 키프레임 재생기 가로선 두께 (px)
+     */
     const horizontalLineThickness=1;
+        /**
+     * 키프레임 재생기 가로선 간격 (px)
+     */
     const horizontalLineColumnAxisInterval=15;
 
     const numberingStartOffsetX=horizontalLineStartOffsetX;
@@ -68,17 +86,43 @@ function KeyframeEditor()
         masterManager.stop();
     }
 
+
+    /**
+     * 
+     * @todo 시간이 겹치는 부분에 키프레임 생성시, 키프레임이 생성되지 않도록 수정해야 함 
+     * 
+     * 
+     */
     function onClickAddKeyframe()
     {
-        //현재 상태가 pause 또는 stop이 아니면, 리턴한다.
+        //get Keyframe list
+        if(masterManager.sceneManager.getCurrentScene()==null) return;
+        if(masterManager.sceneManager.getCurrentScene().layerList.length===0) return;
+
+        let currentLayerIndex= masterManager.sceneManager.currentLayerIndex;
+        let currentLayer=masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex];
+        let keyframes=currentLayer.getKeyframes();
+
+        //현재 상태가 pause 또는 stop이 아니면 (play 상태이면)
+        //pause 상태로 설정한다.
+        masterManager.pause();
 
         //현재 상태가 pause이고,
         //playTime이 가리키고 있는 곳에 keyframe이 없다면
-        //playTime이 0이면, next keyframe이 있는지 검사하고
-        //있으면 next keyframe과 같은 값을 갖도록 키프레임을 생성한다.
-        //없으면 디폴트 값 키프레임을 생성한다.
+        //디폴트 값 키프레임을 생성한다.
+        let progressRate=1.0-(numberCounts-masterManager.sceneTimer.getPlayTime())/parseFloat(numberCounts);
         //default keyframe : position: masterManager canvas center, scale (1,1), rotation: zero, image_fade_alpha:1.0, 
         //textkeyframe일 때 color={red:128, green:128, blue: 128}
+        if(currentLayer.layerType==="image")
+        {
+            currentLayer.addKeyframe(new Keyframe(masterManager.sceneTimer.getPlayTime(),new Vector2D(masterManager.frontCanvas.width/2, masterManager.frontCanvas.height/2), new Vector2D(1,1),0,1 ));
+        }
+        else if(currentLayer.layerType==="text")
+        {
+            currentLayer.addKeyframe(new TextKeyframe(masterManager.sceneTimer.getPlayTime(), new Vector2D(masterManager.frontCanvas.width/2, masterManager.frontCanvas.height/2),new Vector2D(1,1),0,1,{red:128, green:128, blue:128}));
+        }
+
+
 
         //현재 playTime이 0이 아니면
             //lastKeyframe.timeLabel보다 playTime 값이 클 때
@@ -99,8 +143,25 @@ function KeyframeEditor()
 
     function onClickEditKeyframe()
     {
+        //선택된 키프레임이 없다면, 창을 출력하지 않는다.
         //현재 키프레임 값을 편집할 수 있는 모달 창을 출력한다.
-        setKeyframeEditModalOpen(true);
+
+                //get Keyframe list
+        if(masterManager.sceneManager.getCurrentScene()==null) return;
+        if(masterManager.sceneManager.getCurrentScene().layerList.length===0) return;
+
+        let currentLayerIndex= masterManager.sceneManager.currentLayerIndex;
+        let currentLayer=masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex];
+        let keyframes=currentLayer.getKeyframes();
+
+        keyframes.forEach((keyframe, index, array)=>
+        {
+            if(keyframe.isSelected)
+            {
+                setKeyframeEditModalOpen(true);
+            }
+        }
+        );
     }
 
 
@@ -501,7 +562,6 @@ function KeyframeEditor()
                     
                     if(left<=mouseX && mouseX <=right && top<=mouseY && mouseY<=bottom)
                     {
-                        console.log('kv line HOVER!!');
                         KVline.isHover=true;
                         return;
                     }
@@ -513,13 +573,11 @@ function KeyframeEditor()
 
                     if(KVline.isMouseDragging)
                     {
-                        console.log('dragging . . .');
                         masterManager.pause();
 
                         if(mouseX<=horizontalLineStartOffsetX-25)
                         {
                             masterManager.sceneTimer.setPlayTime(0);
-                            console.log('playtime 0');
                         }
                         else if(horizontalLineStartOffsetX+horizontalLineLength<=mouseX)
                         {
@@ -580,7 +638,6 @@ function KeyframeEditor()
                     {
                      let btn=UIButtons[i];
                      let isClicked=isIntersectSquareRange(btn.position.x, btn.position.y, btn.xLength,btn.yLength,mouseX, mouseY);
-                     console.log(`${btn.position.x} , ${btn.position.y}`);
             
                         if(isClicked)
                         {
@@ -658,12 +715,25 @@ function KeyframeEditor()
         
     ,[]);
 
+    function handleKeyframeChange(keyframe,index){
+                
+        let currentLayer=masterManager.sceneManager.getCurrentScene().layerList[masterManager.sceneManager.currentLayerIndex];
+        currentLayer.removeKeyframe(index);
+        currentLayer.addKeyframe(keyframe);               
+        
+        setKeyframeEditModalOpen(false);
+    }
+
 
 
     return <>
         <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight} className={styles.keyframe_editor_canvas}></canvas>
         {keyframeEditModalOpened?
-            <KeyframeModal OnOkClick={()=>{setKeyframeEditModalOpen(false)}} OnCancelClick={()=>{setKeyframeEditModalOpen(false)}}/>
+            <KeyframeModal
+            type={masterManager.sceneManager.getCurrentScene().layerList[masterManager.sceneManager.currentLayerIndex].layerType}
+            OnChangeKeyframe={handleKeyframeChange} 
+            Keyframes={masterManager.sceneManager.getCurrentScene().layerList[masterManager.sceneManager.currentLayerIndex].getKeyframes()} 
+            OnCancelClick={()=>{setKeyframeEditModalOpen(false)}}/>
             :null
         }
         {keyframeDeleteModalOpened?
@@ -672,19 +742,25 @@ function KeyframeEditor()
                 
                 <div>
                     <button onClick={()=>{
-                        var currentLayer=masterManager.sceneManager.getCurrentScene().layerList[masterManager.sceneManager.currentLayerIndex];
-                        var keyframes=currentLayer.getKeyframes();
-                        for(var i=0; i<keyframes.length; i++)
-                        {
-                            if(keyframes[i].isSelected)
+
+                                //get Keyframe list
+                     if(masterManager.sceneManager.getCurrentScene()==null) return;
+                     if(masterManager.sceneManager.getCurrentScene().layerList.length===0) return;
+
+                        let currentLayerIndex= masterManager.sceneManager.currentLayerIndex;
+                     let currentLayer=masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex];
+                     let keyframes=currentLayer.getKeyframes();
+
+                        keyframes.forEach((keyframe, index, value)=>{
+
+                            if(keyframe.isSelected)
                             {
-                                currentLayer.removeKeyframe(i);
-                                break;
+                                currentLayer.removeKeyframe(index);
                             }
-                        }
+                        });
                         
                         
-                        setKeyframeDeleteModalOpen(false);}}>확인</button>
+                        setKeyframeDeleteModalOpen(false);}}>삭제</button>
                     <button onClick={()=>{setKeyframeDeleteModalOpen(false);}}>취소</button>
                 </div>
 

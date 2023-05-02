@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { Keyframe, TextKeyframe } from "../../lib/Keyframe";
+import Vector2D from "../../lib/Vector2D";
 import Modal from "../Modal";
 import styles from "./KeyframeModal.module.css";
 
@@ -13,46 +16,125 @@ import styles from "./KeyframeModal.module.css";
  * 
  * Last Updated: 2023-04-26
  * **/
-function KeyframeModal(props)
+function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
 {
+    let keyframe=null;
+    let selectedIndex=-1;
 
-    return (<>
+    Keyframes.forEach((item, index, array)=>{
+        
+        if(item.isSelected)
+        {
+            keyframe=item;
+            selectedIndex=index;
+        }
+    });
+
+    const [posX, setposX] = useState(keyframe.position.x);
+    const [posY, setposY] = useState(keyframe.position.y);
+    const [scaleX, setscaleX] = useState(keyframe.scale.x);
+    const [scaleY, setscaleY] = useState(keyframe.scale.y);
+    const [rot, setrot] =useState(keyframe.rotation);
+    const [timeLabel, settimeLabel] =useState(keyframe.timeLabel);
+    const [color, setcolor] =useState( type==="text" ? keyframe.color : null);
+    const [alpha, setalpha] =useState(keyframe.image_fade_alpha);
+
+    function changePosX(event)
+    {
+        setposX(event.target.value);
+    }
+
+    function changePosY(event)
+    {
+        setposY(event.target.value);
+    }
+
+    function changeScaleY(event)
+    {
+        setscaleY(event.target.value);
+    }
+
+    function changeScaleX(event)
+    {
+        setscaleX(event.target.value);
+    }
+
+    function changeRotation(event)
+    {
+        setrot(event.target.value);
+    }
+
+    function changeTimeLabel(event)
+    {
+        if(0<= event.target.value && event.target.value<=15)
+        {
+            settimeLabel(event.target.value);
+        }
+    }
+
+    function changeImageFadeAlpha(event)
+    {
+        if(0.0<= event.target.value && event.target.value <=1.0)
+        {
+            setalpha(event.target.value);
+        }
+    }
+
+    function changeColor(event)
+    {
+        setcolor(event.target.value);
+    }
+
+    function changeKeyframeData()
+    {
+        switch(type)
+        {
+            case "text":
+                
+                OnChangeKeyframe(new TextKeyframe(timeLabel,new Vector2D(posX, posY),new Vector2D(scaleX,scaleY), rot,alpha,color),selectedIndex);
+                break;
+            case "image":
+                
+                OnChangeKeyframe(new Keyframe(timeLabel,new Vector2D(posX, posY),new Vector2D(scaleX,scaleY), rot,alpha),selectedIndex);
+            break;
+        }
+    }
+
+
+    return (    
+    <>
         <Modal>
             <div className={styles.container}>
             <h3>
-            {props.type==="image"? "이미지" :"텍스트"} 키프레임 에디터
+            {type==="image"? "이미지" :"텍스트"} 키프레임 에디터
             </h3>
                 <div className={styles.input_row}>
                     <h5>위치</h5>
-                    <div>가로</div> <input type="text" className={styles.input_box}></input>
-                    <div>세로</div> <input type="text" className={styles.input_box}></input>
+                    <div>가로</div> <input type="number" className={styles.input_box} value={posX} onChange={(e)=>{changePosX(e)}}></input>
+                    <div>세로</div> <input type="number" className={styles.input_box} value={posY} onChange={(e)=>{changePosY(e)}}></input>
                 </div>
                 <div className={styles.input_row}>
                     <h5>크기</h5>
-                    <div>가로</div><input type="text" className={styles.input_box}></input>
-                    <div>세로</div><input type="text" className={styles.input_box}></input>
+                    <div>가로</div><input type="number" className={styles.input_box} value={scaleX} onChange={(e)=>{changeScaleX(e)}}></input>
+                    <div>세로</div><input type="number" className={styles.input_box} value={scaleY} onChange={(e)=>{changeScaleY(e)}}></input>
                 </div >
                 <div className={styles.input_row}>
-                <h5>회전</h5><input type="text" className={styles.input_box}></input>
+                <h5>불투명도</h5><input type="number" className={styles.input_box} value={rot} onChange={(e)=>{changeImageFadeAlpha(e)}}></input>
                 </div>
-                {props.type==="font"? 
-                                <div className={styles.input_row}>
-                                폰트 선택
-                                <select className={styles.input_box}>
-                                    <option value="font1">Sans serif</option>
-                                    <option value="font1">네이버 나눔스퀘어</option>
-                                    <option value="font1">에스코어 드림</option>
-                                </select>
-                                </div>
-                
-                :null}
+                <div className={styles.input_row}>
+                <h5>회전</h5><input type="number" className={styles.input_box} value={rot} onChange={(e)=>{changeRotation(e)}}></input>
+                </div>
                 <h5 className={styles.input_row}>시간
-                    <input type="text"></input>
+                    <input type="number" value={timeLabel} onChange={(e)=>{changeTimeLabel(e)}}></input>
                 </h5>
 
                 <div className={styles.input_row}>
-                    <button onClick={props.OnOkClick}>확인</button>
-                    <button onClick={props.OnCancelClick}>취소</button>
+                    <button onClick={()=>{
+
+                        changeKeyframeData();
+
+                    }}>확인</button>
+                    <button onClick={OnCancelClick}>취소</button>
                 </div>
             </div>
         </Modal>

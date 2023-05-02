@@ -1,0 +1,45 @@
+.list_title
+{
+    font-size: 1.2rem;
+
+    min-width:150px;
+    
+    text-align: center;
+    background-color: gainsboro;
+
+    position:sticky;
+}
+
+.list_view{
+   margin:0px;
+   height:600px;
+   min-width:150px;
+   max-width:150px;
+   display:flex;
+   flex-direction: column;
+   justify-content: space-between;
+
+   background-color:bisque;
+}
+
+.sounds
+{
+  height:550px;
+  overflow-y:scroll;
+  background-color: aquamarine;
+
+}
+
+.modal_btn_box
+{
+  display:flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.name_text_area
+{
+  width:50%;
+}

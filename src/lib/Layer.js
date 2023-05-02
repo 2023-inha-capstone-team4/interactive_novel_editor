@@ -61,8 +61,13 @@ export class Layer
     //index 위치의 keyframe을 제거한다.
     removeKeyframe(index)
     {
-        this.keyframeList.filter((keyframe)=>{
-            return keyframe!==this.keyframeList[index];
+        this.keyframeList.forEach((keyframe, idx, array)=>{
+            
+            if(index===idx)
+            {
+                this.keyframeList.splice(idx, 1);
+            }
+
         });
 
         this.sortKeyframes();

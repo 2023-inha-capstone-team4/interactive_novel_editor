@@ -1,5 +1,19 @@
 import Vector2D, {Vector2f} from './Vector2D';
 
+
+/**
+ * Keyframe 데이터를 나타내는 클래스
+ * @param timeLabel 
+ *      float : 키프레임이 나타내는 시간
+ * @param position
+ *      Vector2D : 위치
+ * @param scale
+ *      Vector2D : 크기 배율
+ * @param rotation
+ *      float : '도' 단위 회전 값
+ * @param image_fade_alpha
+ *      float : 0~1 사이의 불투명도
+ */
 export class Keyframe
 {
     constructor(timeLabel,position,scale,rotation,image_fade_alpha)
@@ -58,6 +72,12 @@ export class Keyframe
 
 
 
+    /**
+     * 첫 번째 키프레임 k1, 두 번째 키프레임 k2의 사이 시간 'time'값으로 Linear Interpolation을 적용한다.
+     * @param k1 : 첫번째 키프레임
+     * @param k2 : 두번째 키프레임
+     * @param time : 첫번째 키프레임과 두번째 키프레임 사이의 시간
+     */
     static interpolate(k1, k2, time)
     {
         var timeSegmentLength=k2.timeLabel-k1.timeLabel;
@@ -80,9 +100,22 @@ export class Keyframe
 }
 
 /**
- * 폰트 색상인 Color를 추가함.
+ * /**
+ * Keyframe 데이터를 나타내는 클래스
+ * @param timeLabel 
+ *      float : 키프레임이 나타내는 시간
+ * @param position
+ *      Vector2D : 위치
+ * @param scale
+ *      Vector2D : 크기 배율
+ * @param rotation
+ *      float : '도' 단위 회전 값
+ * @param image_fade_alpha
+ *      float : 0~1 사이의 불투명도
  * 
- * * */
+ * @param color
+ *      red, green, blue : float : 폰트의 색상
+ */
 export class TextKeyframe extends Keyframe
 {
     constructor(timeLabel, position, scale,rotation,image_fade_alpha, color)
