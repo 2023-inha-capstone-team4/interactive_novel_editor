@@ -7,13 +7,6 @@ import {Scene} from "../Scene";
  * 프로젝트를 json으로 변환하거나,
  * json을 프로젝트 파일로 변환합니다. * 
  * 
- * @function changeSceneListToJson
- * @param sceneList
- * 
- * 
- * 
- * @function changeJsonToSceneList
- *  @param jsonObjectr
  * 
  * 
  */
@@ -84,5 +77,17 @@ export class JsonParser
         }
       
         return scene;
+      }
+
+      static jsonToSceneList(json) {
+        const sceneListJson = JSON.parse(json);
+        const sceneList = [];
+      
+        for (const sceneJson of sceneListJson) {
+          const scene = JsonParser.jsonToScene(sceneJson);
+          sceneList.push(scene);
+        }
+      
+        return sceneList;
       }
 }
