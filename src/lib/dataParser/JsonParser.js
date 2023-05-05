@@ -21,7 +21,6 @@ export class JsonParser
         const layer = new ImageLayer(json.imagePath);
         layer.name = json.name;
         layer.repeatType = json.repeatType;
-        layer.layerType="image";
       
         for (const keyframeJson of json.keyframeList) {
           const keyframe = new Keyframe(
