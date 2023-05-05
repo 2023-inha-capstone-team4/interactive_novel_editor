@@ -14,6 +14,11 @@ export class SceneManager
         this.currentLayerIndex=0;
     }
 
+    changeSceneListToJson()
+    {
+      return JSON.stringify(this.sceneList);
+    }
+
 
     getCurrentScene()
     {

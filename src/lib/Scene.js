@@ -8,9 +8,6 @@ export class Scene{
 
         this.name="new scene";
         this.selectedLayerIndex=0;
-
-        this.width=800;
-        this.height=600;
     }
 
     getLayerByIndex(index)

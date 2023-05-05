@@ -7,9 +7,8 @@ import { SceneTimer } from './SceneTimer.js';
 import { Scene } from './Scene.js';
 import { Keyframe, TextKeyframe } from './Keyframe.js';
 import Vector2D from './Vector2D.js';
-import { SoundEvent } from './SoundEvent.js';
-import { SoundPlayer } from './SoundPlayer.js';
-import { AudioSound } from './AudioSound.js';
+import { ProjectJsonParser } from './dataParser/JsonParser.js';
+import { SoundManager } from './SoundManager.js';
 
 
 export class MasterManager
@@ -27,11 +26,12 @@ export class MasterManager
         //scene Manager
         this.sceneManager=new SceneManager();
 
+        //
+        this.soundManager=new SoundManager();
+
         //scene renderer
         this.sceneRenderer= new SceneRenderer();
 
-        //sound Player
-        this.soundPlayer= new SoundPlayer();
 
         //test variable
         this.square_angle=0;
@@ -73,6 +73,9 @@ export class MasterManager
         this.txtLayer.addKeyframe(new TextKeyframe(0,new Vector2D(400,300), new Vector2D(1,1), 0, 1, {red:255, green:255, blue:255}));
         this.txtLayer.addKeyframe(new TextKeyframe(0.75,new Vector2D(800,300), new Vector2D(3,3), 0, 0, {red:255, green:124, blue:0}));
         this.sceneManager.getCurrentScene().addLayer(this.txtLayer);
+
+
+        console.log(ProjectJsonParser.changeSceneListToJson(this.sceneManager.sceneList));
 
         //scene 2번째 test code
         // this.sceneManager.createNewScene();
