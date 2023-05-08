@@ -38,6 +38,7 @@ export class Scene{
     addLayer(layer)
     {
         this.layerList.push(layer);
+        this.selectedLayerIndex=this.layerList.length-1;
     }
 
 

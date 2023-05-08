@@ -1,4 +1,4 @@
-export class SoundSystem {
+export class SoundManager {
   constructor(soundList) {
     this.soundList = soundList;
     this.isPlaying = false;

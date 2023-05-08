@@ -15,6 +15,7 @@ import binIconSrc from '../resources/images/buttons/bin_icon.png';
 
 import Modal from './Modal';
 import LayerEditor from './LayerEditor';
+import SoundListView from './SoundListView';
 
 
 function ScenesListView()
@@ -118,6 +119,7 @@ function ScenesListView()
             </MenuBar>
         </section>
         <LayerEditor currentSceneIndex={selectedSceneIndex}/>
+        <SoundListView soundList={masterManager.sceneManager.getCurrentScene().soundList}/>
         
         {
             //change name modal

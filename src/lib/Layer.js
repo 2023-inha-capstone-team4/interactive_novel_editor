@@ -1,3 +1,4 @@
+import { TextKeyframe } from './Keyframe';
 import {Vector2D} from './Vector2D';
 
 export class Layer
@@ -49,6 +50,8 @@ export class Layer
         this.keyframeList.sort(function(k1,k2){
             return k1.timeLabel-k2.timeLabel;
         });
+
+        console.log(this.keyframeList);
     }
 
     //해당 index의 keyframe의 timeLabel을 toTime으로 이동시킨다.
@@ -103,19 +106,18 @@ export class TextLayer extends Layer
         super();
         this.fontType='Sans Serif';
         this.fontSize=60;
-        this.text="hello!";
         this.layerType="text";
     }
 
 
     setText(text)
     {
-        this.text=text;
+        this.name=text;
     }
 
     getText()
     {
-        return this.text;
+        return this.name;
     }
 
 

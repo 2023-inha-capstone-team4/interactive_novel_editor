@@ -119,6 +119,7 @@ function KeyframeEditor()
         }
         else if(currentLayer.layerType==="text")
         {
+            console.log('add keyframe!');
             currentLayer.addKeyframe(new TextKeyframe(masterManager.sceneTimer.getPlayTime(), new Vector2D(masterManager.frontCanvas.width/2, masterManager.frontCanvas.height/2),new Vector2D(1,1),0,1,{red:128, green:128, blue:128}));
         }
 
@@ -642,6 +643,7 @@ function KeyframeEditor()
                         if(isClicked)
                         {
                             btn.onClick();
+                            console.log(btn);
                             return;
                         }
                     }

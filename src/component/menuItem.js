@@ -21,6 +21,7 @@ function MenuItem(props)
         <>
         <div className={styles.menu_button} onClick={props.onClick}>
             <img className={styles.button_image} src={props.imageSrc}></img>
+            {props.children}
         </div>
         </>
     );

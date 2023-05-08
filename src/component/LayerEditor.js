@@ -1,5 +1,5 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { Layer } from '../lib/Layer';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { ImageLayer, Layer, TextLayer } from '../lib/Layer';
 import LayerItem from './LayerItem';
 import styles from './LayoutEditor.module.css';
 import MenuBar from './menuBar';
@@ -14,6 +14,8 @@ import { useContext } from 'react';
 import { MasterManagerContext } from '../lib/MasterManagerContext';
 
 import MenuItem from './menuItem';
+import { Keyframe, TextKeyframe } from '../lib/Keyframe';
+import Vector2D from '../lib/Vector2D';
 
 function LayerEditor(props)
 {
@@ -21,7 +23,8 @@ function LayerEditor(props)
     const masterManager=useContext(MasterManagerContext);
     const [currentLayerList, setLayerList] = useState([]);
 
-    const [selectedLayerIndex, setSelectedLayerIndex] = useState(0);
+    const [selectedLayerIndex, setSelectedLayerIndex] = useState(-1);
+    const fileInputRef = useRef(null);
 
     useEffect(()=>{
         setLayerList(masterManager.sceneManager.getCurrentScene().layerList);
@@ -36,16 +39,16 @@ function LayerEditor(props)
 
     function addImageLayer()
     {
-
+        
     }
 
     function addTextLayer()
     {
-
+        var newTextLayer=new TextLayer();
+        newTextLayer.addKeyframe(new TextKeyframe(0,new Vector2D(masterManager.canvasWidth/2,masterManager.canvasHeight/2), new Vector2D(1,1),0,1,{red:128, green:128, blue:128}));
+        masterManager.sceneManager.getCurrentScene().addLayer(newTextLayer);
+        setSelectedLayerIndex(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
     }
-
-    function addEffectLayer()
-    {}
 
     function copyCurrentLayer()
     {}
@@ -54,7 +57,22 @@ function LayerEditor(props)
     {}
 
     function deleteCurrentLayer()
-    {}
+    {
+
+    }
+
+    function handleLoadImageLayer(e)
+    {
+        const file=fileInputRef.current.files[0];
+        const fileURL=URL.createObjectURL(file);
+
+        var newImageLayer=new ImageLayer(fileURL);
+
+        newImageLayer.addKeyframe(new Keyframe(0,new Vector2D(masterManager.canvasWidth/2,masterManager.canvasHeight/2), new Vector2D(1,1),0,1));
+        masterManager.sceneManager.getCurrentScene().addLayer(newImageLayer);
+        setSelectedLayerIndex(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
+        
+    }
 
 
     return <>
@@ -74,9 +92,17 @@ function LayerEditor(props)
                 }
         </div>
         <MenuBar>
-            <MenuItem imageSrc={imgIconSrc} onClick={()=>{addImageLayer()}}></MenuItem>
+            <MenuItem imageSrc={imgIconSrc} onClick={()=>{addImageLayer()}}>
+            <input
+
+        type="file"
+        accept=".jpg,.png,.gif"
+        onChange={handleLoadImageLayer}
+        ref={fileInputRef}
+        color="transparent"
+      />
+            </MenuItem>
                 <MenuItem imageSrc={TIconSrc} onClick={()=>{addTextLayer()}}></MenuItem>
-                <MenuItem imageSrc={fxIconSrc} onClick={()=>{addEffectLayer()}}></MenuItem>
                 <MenuItem imageSrc={copyIconSrc} onClick={()=>{copyCurrentLayer()}}></MenuItem>
                 <MenuItem imageSrc={abcIconSrc} onClick={()=>{changeCurrentLayerName()}}></MenuItem>
                 <MenuItem imageSrc={binIconSrc} onClick={()=>{deleteCurrentLayer()}}></MenuItem>
