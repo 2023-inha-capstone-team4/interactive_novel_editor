@@ -21,8 +21,8 @@
     position:fixed;
     opacity: 1;
     background-color: white;
-    width:50%;
-    height:50%;
+    width:80%;
+    height:80%;
     border-radius: 10px;
     display:flex;
     flex-direction: column;

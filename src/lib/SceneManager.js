@@ -9,14 +9,6 @@ export class SceneManager
 
         this.curSceneIdx=0;
 
-
-        //manage scene layers
-        this.currentLayerIndex=0;
-    }
-
-    changeSceneListToJson()
-    {
-      return JSON.stringify(this.sceneList);
     }
 
 

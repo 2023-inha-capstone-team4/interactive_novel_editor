@@ -39,6 +39,11 @@ function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
     const [color, setcolor] =useState( type==="text" ? keyframe.color : null);
     const [alpha, setalpha] =useState(keyframe.image_fade_alpha);
 
+    const [red, setRed] =useState(type==="text" ? keyframe.color.red : null);
+    const [green, setGreen] =useState(type==="text" ? keyframe.color.green : null);
+    const [blue, setBlue] =useState(type==="text" ? keyframe.blue : null);
+
+
     function changePosX(event)
     {
         setposX(event.target.value);
@@ -85,13 +90,30 @@ function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
         setcolor(event.target.value);
     }
 
+    function changeRed(event)
+    {
+        setRed(event.target.value);
+    }
+
+    
+    function changeGreen(event)
+    {
+        setGreen(event.target.value);
+    }
+
+    
+    function changeBlue(event)
+    {
+        setBlue(event.target.value);
+    }
+
     function changeKeyframeData()
     {
         switch(type)
         {
             case "text":
                 
-                OnChangeKeyframe(new TextKeyframe(timeLabel,new Vector2D(posX, posY),new Vector2D(scaleX,scaleY), rot,alpha,color),selectedIndex);
+                OnChangeKeyframe(new TextKeyframe(timeLabel,new Vector2D(posX, posY),new Vector2D(scaleX,scaleY), rot,alpha,{red:red, green:green, blue:blue}),selectedIndex);
                 break;
             case "image":
                 
@@ -119,11 +141,19 @@ function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
                     <div>세로</div><input type="number" className={styles.input_box} value={scaleY} onChange={(e)=>{changeScaleY(e)}}></input>
                 </div >
                 <div className={styles.input_row}>
-                <h5>불투명도</h5><input type="number" className={styles.input_box} value={rot} onChange={(e)=>{changeImageFadeAlpha(e)}}></input>
+                <h5>불투명도</h5><input type="number" className={styles.input_box} value={alpha} onChange={(e)=>{changeImageFadeAlpha(e)}}></input>
                 </div>
                 <div className={styles.input_row}>
                 <h5>회전</h5><input type="number" className={styles.input_box} value={rot} onChange={(e)=>{changeRotation(e)}}></input>
                 </div>
+                {type==="text"? <>
+                <div className={styles.input_row}>
+                    <h5>색상</h5>
+                    <div>Red</div> <input type="number" className={styles.input_box} value={red} onChange={(e)=>{changeRed(e)}}></input>
+                    <div>Green</div> <input type="number" className={styles.input_box} value={green} onChange={(e)=>{changeGreen(e)}}></input>
+                    <div>Blue</div> <input type="number" className={styles.input_box} value={blue} onChange={(e)=>{changeBlue(e)}}></input>
+                    </div>
+                    </> :null}
                 <h5 className={styles.input_row}>시간
                     <input type="number" value={timeLabel} onChange={(e)=>{changeTimeLabel(e)}}></input>
                 </h5>

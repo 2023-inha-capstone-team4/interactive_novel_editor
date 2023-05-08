@@ -37,17 +37,14 @@ function LayerEditor(props)
         masterManager.sceneManager.currentLayerIndex=index;
     }
 
-    function addImageLayer()
-    {
-        
-    }
-
     function addTextLayer()
     {
         var newTextLayer=new TextLayer();
         newTextLayer.addKeyframe(new TextKeyframe(0,new Vector2D(masterManager.canvasWidth/2,masterManager.canvasHeight/2), new Vector2D(1,1),0,1,{red:128, green:128, blue:128}));
         masterManager.sceneManager.getCurrentScene().addLayer(newTextLayer);
-        setSelectedLayerIndex(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
+
+        selectLayer(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
+        setLayerList([...masterManager.sceneManager.getCurrentScene().layerList]);
     }
 
     function copyCurrentLayer()
@@ -58,7 +55,11 @@ function LayerEditor(props)
 
     function deleteCurrentLayer()
     {
-
+        masterManager.sceneManager.getCurrentScene().selectedLayerIndex=selectedLayerIndex;
+        masterManager.sceneManager.getCurrentScene().removeSelectedLayer();
+        selectLayer(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
+        setLayerList([...masterManager.sceneManager.getCurrentScene().layerList]);
+        
     }
 
     function handleLoadImageLayer(e)
@@ -71,6 +72,7 @@ function LayerEditor(props)
         newImageLayer.addKeyframe(new Keyframe(0,new Vector2D(masterManager.canvasWidth/2,masterManager.canvasHeight/2), new Vector2D(1,1),0,1));
         masterManager.sceneManager.getCurrentScene().addLayer(newImageLayer);
         setSelectedLayerIndex(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
+        setLayerList([...masterManager.sceneManager.getCurrentScene().layerList]);
         
     }
 
@@ -92,7 +94,7 @@ function LayerEditor(props)
                 }
         </div>
         <MenuBar>
-            <MenuItem imageSrc={imgIconSrc} onClick={()=>{addImageLayer()}}>
+            <MenuItem imageSrc={imgIconSrc} onClick={()=>{}}>
             <input
 
         type="file"

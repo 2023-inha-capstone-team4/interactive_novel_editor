@@ -56,7 +56,7 @@ export class Scene{
 
     removeSelectedLayer()
     {
-        this.layerList=this.layerList.filter(function(layer,index, arr){
+        this.layerList=this.layerList.filter((layer,index, arr)=>{
             return this.selectedLayerIndex!==index;
         });
 
