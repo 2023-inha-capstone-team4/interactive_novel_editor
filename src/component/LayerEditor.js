@@ -16,6 +16,7 @@ import { MasterManagerContext } from '../lib/MasterManagerContext';
 import MenuItem from './menuItem';
 import { Keyframe, TextKeyframe } from '../lib/Keyframe';
 import Vector2D from '../lib/Vector2D';
+import Modal from './Modal';
 
 function LayerEditor(props)
 {
@@ -25,6 +26,10 @@ function LayerEditor(props)
 
     const [selectedLayerIndex, setSelectedLayerIndex] = useState(-1);
     const fileInputRef = useRef(null);
+
+    const [isOpenChangeNameModal, setIsOpenChangeNameModal] =useState(false);
+    const [nameText, setNameText] =useState("");
+
 
     useEffect(()=>{
         setLayerList(masterManager.sceneManager.getCurrentScene().layerList);
@@ -51,7 +56,9 @@ function LayerEditor(props)
     {}
 
     function changeCurrentLayerName()
-    {}
+    {
+        setIsOpenChangeNameModal(true);
+    }
 
     function deleteCurrentLayer()
     {
@@ -74,6 +81,29 @@ function LayerEditor(props)
         setSelectedLayerIndex(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
         setLayerList([...masterManager.sceneManager.getCurrentScene().layerList]);
         
+    }
+
+
+    function changeLayerNameTextfield(event)
+    {
+            setNameText(event.target.value);
+    }
+
+    function changeLayerName()
+    {
+       let currentScene= masterManager.sceneManager.getCurrentScene();
+       
+       if(currentScene==null) return;
+       if(currentScene.layerList.length===0) return;
+
+       let currentLayer=currentScene.layerList[selectedLayerIndex];
+
+       currentLayer.name=nameText;
+    }
+
+    function closeLayerNameModal()
+    {
+        setIsOpenChangeNameModal(false);
     }
 
 
@@ -110,6 +140,27 @@ function LayerEditor(props)
                 <MenuItem imageSrc={binIconSrc} onClick={()=>{deleteCurrentLayer()}}></MenuItem>
         </MenuBar>
     </section>
+    {
+            //change name modal
+            isOpenChangeNameModal? 
+            <Modal>
+                <h5>레이어 이름을 변경합니다.</h5>
+                <div>텍스트 레이어의 경우, 화면에 반영됩니다</div>
+                <div>현재의 Layer이름 : {masterManager.sceneManager.getCurrentScene().layerList[selectedLayerIndex].name}</div>
+                <textarea className={styles.name_text_area} value={nameText} onChange={(e)=>{
+                    changeLayerNameTextfield(e);
+                }}></textarea>
+                <div className={styles.modal_btn_box}>
+                    <button onClick={()=>{
+                        
+                        changeLayerName();
+                        closeLayerNameModal();
+                        setNameText("");
+                        }}>변경하기</button>
+                    <button onClick={closeLayerNameModal}>취소</button>
+                </div>
+            </Modal>
+            :null}
     </>;
 }
 
