@@ -1,4 +1,13 @@
-
+.container
+{
+    width: 50%;
+    height: 800px;
+    display:flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+}
 
 
 .input_row

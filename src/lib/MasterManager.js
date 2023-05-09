@@ -62,7 +62,7 @@ export class MasterManager
             const currentPlayTime = this.sceneTimer.getPlayTime();
           
             soundEvents.forEach(soundEvent => {
-              if (soundEvent.timeLabel <= currentPlayTime && !soundEvent.isPlaying) {
+              if (soundEvent.timeLabel<=currentPlayTime && !soundEvent.isPlaying && this.playerStatus==="play") {
                 soundEvent.play();
               }
             });
@@ -70,12 +70,12 @@ export class MasterManager
     
           play() {
             this.playerStatus = "play";
-            const currentScene = this.sceneManager.getCurrentScene();
-            currentScene.soundList.forEach(soundEvent => {
-              if (soundEvent.isPlaying) {
-                soundEvent.resume();
-              }
-            });
+            // const currentScene = this.sceneManager.getCurrentScene();
+            // currentScene.soundList.forEach(soundEvent => {
+            //   if (!soundEvent.isPlaying) {
+            //     soundEvent.resume();
+            //   }
+            // });
           }
 
           stop() {
@@ -84,18 +84,17 @@ export class MasterManager
             const currentScene = this.sceneManager.getCurrentScene();
             currentScene.soundList.forEach(soundEvent => {
               soundEvent.stop();
-              soundEvent.reset();
             });
           }
 
           pause() {
             this.playerStatus = "pause";
-            const currentScene = this.sceneManager.getCurrentScene();
-            currentScene.soundList.forEach(soundEvent => {
-              if (soundEvent.isPlaying) {
-                soundEvent.pause();
-              }
-            });
+            // const currentScene = this.sceneManager.getCurrentScene();
+            // currentScene.soundList.forEach(soundEvent => {
+            //   if (soundEvent.isPlaying) {
+            //     soundEvent.pause();
+            //   }
+            // });
           }
 
     

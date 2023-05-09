@@ -122,8 +122,6 @@ export class SceneRenderer
 
             let keyframes=targetLayer.getKeyframes();
 
-            if(keyframes.length===0) continue;
-
 
             let firstKeyframe=keyframes.at(0);
             let lastKeyframe=keyframes.at(keyframes.length-1);

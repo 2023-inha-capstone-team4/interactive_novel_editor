@@ -119,7 +119,7 @@ function ScenesListView()
             </MenuBar>
         </section>
         <LayerEditor currentSceneIndex={selectedSceneIndex}/>
-        <SoundListView soundList={masterManager.sceneManager.getCurrentScene().soundList}/>
+        <SoundListView currentSceneIndex={selectedSceneIndex} soundList={masterManager.sceneManager.getCurrentScene().soundList}/>
         
         {
             //change name modal
