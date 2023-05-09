@@ -14,7 +14,7 @@ import styles from "./KeyframeModal.module.css";
  * @version v0.1
  * @function 
  * 
- * Last Updated: 2023-04-26
+ * Last Updated: 2023-05-09
  * **/
 function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
 {

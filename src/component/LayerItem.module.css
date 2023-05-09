@@ -1,6 +1,21 @@
 .layer_item
 {
     list-style: none;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.repeat_type
+{
+    border: 1px solid cornsilk;
+    padding: 4px;
+}
+
+.repeat_type:hover
+{
+    background-color: aquamarine;
+    padding: 4px;
 }
 
 .layer_item:hover

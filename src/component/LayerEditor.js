@@ -114,7 +114,7 @@ function LayerEditor(props)
                 {
                     currentLayerList.map((layer, index, arr)=>{
                         return <LayerItem key={index} isSelected={(selectedLayerIndex===index)}         
-                        
+                        repeatType={layer.repeatType}
                         layer={layer} onClick={()=>{
 
                             selectLayer(index);
