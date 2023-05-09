@@ -41,7 +41,7 @@ function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
 
     const [red, setRed] =useState(type==="text" ? keyframe.color.red : null);
     const [green, setGreen] =useState(type==="text" ? keyframe.color.green : null);
-    const [blue, setBlue] =useState(type==="text" ? keyframe.blue : null);
+    const [blue, setBlue] =useState(type==="text" ? keyframe.color.blue : null);
 
 
     function changePosX(event)

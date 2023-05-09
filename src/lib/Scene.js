@@ -60,7 +60,7 @@ export class Scene{
             return this.selectedLayerIndex!==index;
         });
 
-        if(this.layerList.length<=1)
+        if(this.selectedLayerIndex<=1)
         {
             this.selectedLayerIndex=0;
         }

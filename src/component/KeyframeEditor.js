@@ -68,6 +68,9 @@ function KeyframeEditor()
     const [keyframeEditModalOpened, setKeyframeEditModalOpen] = useState(false);
     const [keyframeDeleteModalOpened, setKeyframeDeleteModalOpen] = useState(false);
 
+    //canvas button 당 event가 1회씩만 발생하도록 Debouncing 테크닉을 적용한다.
+    let isDebouncing = false;
+
 
     const KVline =new KeyframeVerticalLine();
 
@@ -631,6 +634,15 @@ function KeyframeEditor()
             
             
                   canvasRef.current.addEventListener('mousedown', (e) => {
+
+                    if (isDebouncing) return;
+  
+                    isDebouncing = true;
+                    
+                    setTimeout(() => {
+                      isDebouncing = false;
+                    }, 200); // Change the value depending on your needs
+
                     const rect = canvasRef.current.getBoundingClientRect();
                     const mouseX = e.clientX - rect.left;
                     const mouseY = e.clientY - rect.top;
@@ -643,7 +655,6 @@ function KeyframeEditor()
                         if(isClicked)
                         {
                             btn.onClick();
-                            console.log(btn);
                             return;
                         }
                     }
