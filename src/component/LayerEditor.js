@@ -78,7 +78,7 @@ function LayerEditor(props)
 
         newImageLayer.addKeyframe(new Keyframe(0,new Vector2D(masterManager.canvasWidth/2,masterManager.canvasHeight/2), new Vector2D(1,1),0,1));
         masterManager.sceneManager.getCurrentScene().addLayer(newImageLayer);
-        setSelectedLayerIndex(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
+        selectLayer(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
         setLayerList([...masterManager.sceneManager.getCurrentScene().layerList]);
         
     }
@@ -109,7 +109,7 @@ function LayerEditor(props)
 
     return <>
     <section className={styles.layer_editor_box}>
-            <div className={styles.layer_editor_title} >레이어</div>
+            <div className={styles.layer_editor_title} >Layers</div>
             <div className={styles.layer_list}>
                 {
                     currentLayerList.map((layer, index, arr)=>{
@@ -128,13 +128,17 @@ function LayerEditor(props)
             <input
 
         type="file"
+        id="file"
         accept=".jpg,.png,.gif"
         onChange={handleLoadImageLayer}
         ref={fileInputRef}
-        color="transparent"
+        style={{
+            display:"none"
+          }}
       />
+        <label for="file"> image</label>
             </MenuItem>
-                <MenuItem imageSrc={TIconSrc} onClick={()=>{addTextLayer()}}></MenuItem>
+                <MenuItem imageSrc={TIconSrc} onClick={()=>{addTextLayer()}}>Text</MenuItem>
                 <MenuItem imageSrc={copyIconSrc} onClick={()=>{copyCurrentLayer()}}></MenuItem>
                 <MenuItem imageSrc={abcIconSrc} onClick={()=>{changeCurrentLayerName()}}></MenuItem>
                 <MenuItem imageSrc={binIconSrc} onClick={()=>{deleteCurrentLayer()}}></MenuItem>

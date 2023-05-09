@@ -508,6 +508,24 @@ function KeyframeEditor()
                     context.restore();
                    }
             }
+
+
+            //render keyframe text color
+            if(masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex].layerType==="text")
+            {
+                let attr_idx=4;
+                let r=currentKeyframe.color.red;
+                let g=currentKeyframe.color.green;
+                let b=currentKeyframe.color.blue;
+                                  //render text color
+                                  context.save();
+                                  context.globalAlpha=1.0;
+                                  context.beginPath();
+                                  context.arc(horizontalLineStartOffsetX+keyframeXOffset, horizontalLineStartOffsetY+horizontalLineColumnAxisInterval*(attr_idx+1), 5, 0, 2 * Math.PI);
+                                  context.fillStyle = `rgb(${r},${g},${b})`;
+                                  context.fill();
+                                  context.restore();
+            }
         }
 
     }
@@ -680,6 +698,9 @@ function KeyframeEditor()
                     {
                         
                     }
+
+                    if(masterManager.sceneManager.getCurrentScene()===null) return;
+                    if(masterManager.sceneManager.getCurrentScene().layerList.length===0) return;
 
                     let keyframes=masterManager.sceneManager.getCurrentScene().layerList[masterManager.sceneManager.currentLayerIndex].getKeyframes();
                     //intersection 검출 for each keyframe

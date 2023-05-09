@@ -7,13 +7,22 @@ import copyIconSrc from '../resources/images/buttons/copy_icon.png';
 import binIconSrc from '../resources/images/buttons/bin_icon.png';
 
 import styles from './SoundListView.module.css';
+import { useRef, useState } from "react";
 
 
 function SoundListView({soundList})
 {
+    const [sndList, setSoundList] = useState(soundList);
+    const [selectSoundIndex, setSelectSoundIndex] = useState(0);
 
-    function createNewSound()
-    {}
+    var soundFileInputRef=useRef(null);
+
+    function createNewSound(e)
+    {
+        const file=soundFileInputRef.current.files[0];
+        const fileURL=URL.createObjectURL(file);
+        
+    }
 
     function openChangeSoundMameModal()
     {}
@@ -36,7 +45,20 @@ function SoundListView({soundList})
             )): null}
         </div>
         <MenuBar>
-            <MenuItem imageSrc={plusIconSrc} onClick={createNewSound}></MenuItem>
+            <MenuItem imageSrc={plusIconSrc} onClick={()=>{}}>
+            <input
+
+                type="file"
+                id="sound_file"
+                accept="audio/*"
+                onChange={createNewSound}
+                ref={soundFileInputRef}
+                style={{
+                    display:"none"
+                }}
+                />
+                <label for="sound_file"> sound</label>
+            </MenuItem>
             <MenuItem imageSrc={abcIconSrc} onClick={openChangeSoundMameModal}></MenuItem>
             <MenuItem imageSrc={copyIconSrc} onClick={copyCurrentSound}></MenuItem>
             <MenuItem imageSrc={binIconSrc} onClick={deleteCurrentSound}></MenuItem>

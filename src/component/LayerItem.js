@@ -40,7 +40,7 @@ function LayerItem(props) {
     <div
     
     draggable="true" className={`${styles.layer_item}`} style={{backgroundColor:props.isSelected? "pink": "azure"}} onClick={props.onClick} >{props.layer.name}
-    {repeatType==="none"? <div className={styles.repeat_type} onClick={chnageRepeatType}>x</div>:null}
+    {repeatType==="none"? <div className={styles.repeat_type} onClick={chnageRepeatType}>X</div>:null}
     {repeatType==="forward"? <div className={styles.repeat_type} onClick={chnageRepeatType}>→</div>:null}
     {repeatType==="reverse"? <div className={styles.repeat_type} onClick={chnageRepeatType}>↔</div>:null}
     </div>
