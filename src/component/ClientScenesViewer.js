@@ -1,95 +1,126 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import { SceneRenderer } from "../lib/SceneRenderer";
+import { SceneTimer } from "../lib/SceneTimer";
+import { MasterTimer } from "../lib/MasterTimer";
 
-function ClientScenesViewer({ sceneList }) {
-  const [visibleScenes, setVisibleScenes] = useState([]);
-  const sceneRefs = useRef([]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+const ClientScenesViewer = ({ scenes }) => {
+  const canvasRefs = useRef([]);
 
-  useEffect(() => {
-    // Initialize the scene refs array
-    sceneRefs.current = Array(sceneList.length)
-      .fill()
-      .map((_, i) => sceneRefs.current[i] || createSceneRef(i));
-  }, [sceneList]);
+  const [sceneRenderer, setSceneRenderer] = useState(new SceneRenderer());
+  const [sceneTimerList, setSceneTimerList] = useState([]);
+  const [isRenderingList, setIsRenderingList] = useState([]);
+  const [masterTimer, setMasterTimer] =useState(new MasterTimer());
 
-  function createSceneRef(index) {
-    const canvas = document.createElement("canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.style.position = "absolute";
-    canvas.style.top = 0;
-    canvas.style.left = 0;
-    canvas.style.zIndex = -index; // Draw scenes in reverse order
-    document.body.appendChild(canvas);
-
-    return canvas;
+  
+  for(var i =0; i<scenes.length; i++)
+  {
+    sceneTimerList.push(new SceneTimer());
+    isRenderingList.push(false);
   }
 
-  function handleScroll() {
-    updateVisibleScenes();
+  const mainLoop = ()=>
+  {
+      setTimeout(() => {
+          requestAnimationFrame(mainLoop);
+      }, 1000/this.FPS);
+
+      //if(!this.isRenderable()) return;
+      masterTimer.updateTimer();
+      updateTimers(masterTimer.getDeltaTime());
+
+      renderScenes();
+      applySoundSystem();
   }
 
-  function updateVisibleScenes() {
-    const newVisibleScenes = [];
+  function updateTimers(deltaTime)
+  {
+    isRenderingList.forEach((isRendering, index)=>{
 
-    // Loop over each scene canvas and check if it's in the viewport
-    for (let i = 0; i < sceneList.length; i++) {
-      const canvas = sceneRefs.current[i];
-      const rect = canvas.getBoundingClientRect();
-      const isVisible =
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= window.innerHeight &&
-        rect.right <= window.innerWidth;
-      if (isVisible) {
-        // Scene is visible, add it to the list of visible scenes
-        newVisibleScenes.push(i);
+      if(isRendering)
+      {
+        sceneTimerList[index].updateTimer(deltaTime);
       }
-    }
 
-    // Pause any scenes that are no longer visible
-    const pausedScenes = visibleScenes.filter(
-      (sceneIndex) => !newVisibleScenes.includes(sceneIndex)
-    );
-    for (const sceneIndex of pausedScenes) {
-      pauseScene(sceneIndex);
-    }
-
-    // Play any scenes that are now visible
-    const playedScenes = newVisibleScenes.filter(
-      (sceneIndex) => !visibleScenes.includes(sceneIndex)
-    );
-    for (const sceneIndex of playedScenes) {
-      playScene(sceneIndex);
-    }
-
-    // Update the state with the new list of visible scenes
-    setVisibleScenes(newVisibleScenes);
+    });
   }
 
-  function playScene(sceneIndex) {
-    const scene = sceneList[sceneIndex];
-    const canvas = sceneRefs.current[sceneIndex];
-    const ctx = canvas.getContext("2d");
-    // TODO: Render the scene using the canvas context
+  function renderScenes()
+  {
+    isRenderingList.forEach((isRendering, index)=>{
+
+      if(isRendering)
+      {
+        sceneRenderer.clearScreen(canvasRefs.current[index]);
+        sceneRenderer.renderTargetScene(canvasRefs.current[index], scenes[index], sceneTimerList[index].getPlayTime());
+      }
+
+    });
   }
 
-  function pauseScene(sceneIndex) {
-    const scene = sceneList[sceneIndex];
-    const canvas = sceneRefs.current[sceneIndex];
-    const ctx = canvas.getContext("2d");
-    // TODO: Clear the canvas to pause the scene
+  function applySoundSystem()
+  {
+    isRenderingList.forEach((isRendering, index)=>{
+
+      if(isRendering)
+      {
+        let soundEvents=scenes[index].soundList;
+        let currentPlayTime=sceneTimerList[index].getPlayTime();
+
+        soundEvents.forEach(soundEvent => {
+          if (soundEvent.timeLabel<=currentPlayTime && !soundEvent.isPlaying && this.playerStatus==="play") {
+            soundEvent.audio.currentTime=currentPlayTime-soundEvent.timeLabel;
+            soundEvent.play();
+          }
+        });
+      }
+
+    });
   }
+
+
+  useEffect(() => {
+
+    mainLoop();
+
+    const handleScroll = () => {
+      const { scrollTop, clientHeight } = document.documentElement;
+
+      canvasRefs.current.forEach((canvasRef, index) => {
+        const { top, bottom } = canvasRef.getBoundingClientRect();
+
+        // Check if the canvas is within the viewport
+        if (top < clientHeight && bottom > 0) {
+          // Render and play the scene data on the canvas
+          isRenderingList[index]=true;
+        } else {
+          // Pause or stop the scene if needed
+          isRenderingList[index]=false;
+        }
+      });
+    };
+
+    // Attach the scroll event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [scenes]);
+
+
 
   return (
     <div>
-      {sceneList.map((scene, index) => (
-        <canvas ref={(el) => (sceneRefs.current[index] = el)} />
+      {scenes.map((scene, index) => (
+        <canvas
+          key={index}
+          ref={(ref) => (canvasRefs.current[index] = ref)}
+          width={800}
+          height={600}
+        />
       ))}
     </div>
   );
-}
+};

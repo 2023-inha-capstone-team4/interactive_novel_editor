@@ -9,6 +9,16 @@ export class SceneRenderer
         this.targetLayers=[];
     }
 
+    clearScreen(targetCanvas)
+    {
+       let frontContext=targetCanvas.getContext("2d");
+        frontContext.save();
+        frontContext.globalAlpha=1.0;
+        frontContext.fillStyle="black";
+        frontContext.fillRect(0,0, this.canvasWidth, this.canvasHeight);
+        frontContext.restore();
+    }
+
     //최초의 키프레임이 playtime시간 이후인 layer만 렌더링 대상으로 설정한다.
     processLayer(layer, playTime)
     {
