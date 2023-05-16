@@ -21,8 +21,11 @@ function SoundListView({currentSceneIndex,soundList})
     const [selectSoundIndex, setSelectSoundIndex] = useState(0);
     const masterManager=useContext(MasterManagerContext);
 
-    const [isOpenChangeNameModal, setIsOpenChangeNameModal] = useState(false);
+    const [isOpenSoundEditModal, setIsOpenSoundEditModal] = useState(false);
+    const [isZeroCharacter, setIsZeroCharacter] = useState(false);
     const [nameText, setNameText] =useState("");
+
+    const [rangeScrollerValue, setRangeScrollerValue] = useState(0);
 
     var soundFileInputRef=useRef(null);
 
@@ -42,11 +45,13 @@ function SoundListView({currentSceneIndex,soundList})
         
     }
 
-    function openChangeSoundMameModal()
+    function openSoundEditModal()
     {
         if(masterManager.sceneManager.getCurrentScene().soundList.length===0) return;
 
-        setIsOpenChangeNameModal(true);
+        setIsOpenSoundEditModal(true);
+        setNameText(masterManager.sceneManager.getCurrentScene().soundList[selectSoundIndex].name);
+        setRangeScrollerValue(sndList[selectSoundIndex].timeLabel);
     }
 
     function changeSoundName()
@@ -59,6 +64,11 @@ function SoundListView({currentSceneIndex,soundList})
         masterManager.sceneManager.getCurrentScene().soundList[selectSoundIndex].name=nameText;
     }
 
+    function changeSoundTimeLabel()
+    {
+        masterManager.sceneManager.getCurrentScene().soundList[selectSoundIndex].timeLabel=rangeScrollerValue;
+    }
+
     function changeSoundNameTextfield(event)
     {
         if(event.target.value.length<=15)
@@ -67,20 +77,41 @@ function SoundListView({currentSceneIndex,soundList})
         }
     }
 
-    function closeChangeSoundNameModal()
+    function closeSoundEditModal()
     {
-        setIsOpenChangeNameModal(false);
+        setIsOpenSoundEditModal(false);
     }
 
     function copyCurrentSound()
     {}
 
     function deleteCurrentSound()
-    {}
+    {
+        if(masterManager.sceneManager.getCurrentScene().soundList.length===0) return;
+
+        masterManager.sceneManager.getCurrentScene().soundList=masterManager.sceneManager.getCurrentScene().soundList.filter((layer,index, arr)=>{
+            return selectSoundIndex!==index;
+        });
+
+        setSoundList([...masterManager.sceneManager.getCurrentScene().soundList]);
+
+        if(selectSoundIndex<=1)
+        {
+            setSelectSoundIndex(0);
+        }
+        else
+        {
+            setSelectSoundIndex(selectSoundIndex-1);
+        }
+    }
 
     function selectSound(index)
     {
         setSelectSoundIndex(index);
+    }
+
+    function handleSliderChange(event){
+        setRangeScrollerValue(event.target.value);
     }
 
 
@@ -115,27 +146,53 @@ function SoundListView({currentSceneIndex,soundList})
                 />
                 <label for="sound_file"> sound</label>
             </MenuItem>
-            <MenuItem imageSrc={abcIconSrc} onClick={openChangeSoundMameModal}></MenuItem>
+            <MenuItem imageSrc={abcIconSrc} onClick={openSoundEditModal}>Edit</MenuItem>
             <MenuItem imageSrc={copyIconSrc} onClick={copyCurrentSound}></MenuItem>
             <MenuItem imageSrc={binIconSrc} onClick={deleteCurrentSound}></MenuItem>
         </MenuBar>
     </section>
     {
-        isOpenChangeNameModal?
+        isOpenSoundEditModal?
         <Modal>
-                <div>최대 15글자까지 가능합니다</div>
-                <div>현재의 Sound이름 : {masterManager.sceneManager.getCurrentScene().soundList[selectSoundIndex].name}</div>
+                <div>현재의 Sound이름(최대 15자) : {masterManager.sceneManager.getCurrentScene().soundList[selectSoundIndex].name}</div>
+                {
+                    isZeroCharacter? <div style={{color:"red"}}>최소 1자 이상 입력해 주세요</div> : null
+                }
                 <textarea className={styles.name_text_area} value={nameText} onChange={(e)=>{
                     changeSoundNameTextfield(e);
                 }}></textarea>
+
+                <input
+                        type="range"
+                        min={0}
+                        max={15}
+                        value={rangeScrollerValue}
+                        onChange={handleSliderChange}
+                        />
+
                 <div className={styles.modal_btn_box}>
                     <button onClick={()=>{
                         
+                        if(nameText.length===0)
+                        {
+                            setIsZeroCharacter(true);
+                            return;
+                        }
+                        else
+                        {
+                            setIsZeroCharacter(false);
+                        }
+
                         changeSoundName();
-                        closeChangeSoundNameModal();
+                        changeSoundTimeLabel();
+
+                        setSoundList([...masterManager.sceneManager.getCurrentScene().soundList]);
+                        closeSoundEditModal();
                         setNameText("");
+
+
                         }}>변경하기</button>
-                    <button onClick={closeChangeSoundNameModal}>취소</button>
+                    <button onClick={closeSoundEditModal}>취소</button>
                 </div>
             </Modal>
     :null}

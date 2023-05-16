@@ -19,7 +19,7 @@ function Header()
 	  };
 
     return (<>
-        	<header className={styles.header}>
+        	<div className={styles.header}>
 			<nav>
 				<ul className={styles.options}>
 					<li>새 프로젝트</li>
@@ -28,7 +28,7 @@ function Header()
 					<li onClick={()=>{}}>미리보기</li>
 				</ul>
 			</nav>
-		</header>
+		</div>
     
     
     </>);

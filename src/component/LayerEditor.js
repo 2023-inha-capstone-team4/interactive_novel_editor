@@ -72,15 +72,19 @@ function LayerEditor(props)
     function handleLoadImageLayer(e)
     {
         const file=fileInputRef.current.files[0];
-        const fileURL=URL.createObjectURL(file);
-
-        var newImageLayer=new ImageLayer(fileURL);
-
-        newImageLayer.addKeyframe(new Keyframe(0,new Vector2D(masterManager.canvasWidth/2,masterManager.canvasHeight/2), new Vector2D(1,1),0,1));
-        masterManager.sceneManager.getCurrentScene().addLayer(newImageLayer);
-        selectLayer(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
-        setLayerList([...masterManager.sceneManager.getCurrentScene().layerList]);
         
+        if (file) {
+            const fileURL = URL.createObjectURL(file);
+            var newImageLayer = new ImageLayer(fileURL);
+        
+            newImageLayer.addKeyframe(
+              new Keyframe(0, new Vector2D(masterManager.canvasWidth / 2, masterManager.canvasHeight / 2), new Vector2D(1, 1), 0, 1)
+            );
+        
+            masterManager.sceneManager.getCurrentScene().addLayer(newImageLayer);
+            selectLayer(masterManager.sceneManager.getCurrentScene().selectedLayerIndex);
+            setLayerList([...masterManager.sceneManager.getCurrentScene().layerList]);
+          }
     }
 
 

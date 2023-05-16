@@ -2,6 +2,7 @@ import { Keyframe, TextKeyframe } from "../Keyframe";
 import { ImageLayer, Layer, TextLayer } from "../Layer";
 import Vector2D from "../Vector2D";
 import {Scene} from "../Scene";
+import {SoundEvent} from "../SoundEvent";
 
 /**
  * 프로젝트를 json으로 변환하거나,
@@ -57,6 +58,14 @@ export class JsonParser
         return layer;
       }
 
+      static jsonToSoundEvent(json) {
+        const { name, timeLabel, soundPath, duration, isPlaying } = json;
+        const sound = new SoundEvent(timeLabel, soundPath, duration);
+        sound.name = name;
+        sound.isPlaying = isPlaying;
+        return sound;
+      }
+
       
     static jsonToScene(json) {
         const scene = new Scene();
@@ -73,6 +82,15 @@ export class JsonParser
             layer = new Layer();
           }
           scene.addLayer(layer);
+        }
+
+        for (const soundJson of json.soundList)
+        {
+            let sound;
+
+            sound=JsonParser.jsonToSoundEvent(soundJson);
+
+            scene.addSound(sound);
         }
       
         return scene;

@@ -12,7 +12,7 @@
 
 .scene_view{
    margin:0px;
-   height:600px;
+   height:400px;
    min-width:150px;
    max-width:150px;
    display:flex;
@@ -22,9 +22,10 @@
    background-color:bisque;
 }
 
+
 .scenes
 {
-  height:550px;
+  height:560px;
   overflow-y:scroll;
   background-color: aquamarine;
 

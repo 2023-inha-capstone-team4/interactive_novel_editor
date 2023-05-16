@@ -9,6 +9,7 @@ import { Keyframe, TextKeyframe } from './Keyframe.js';
 import Vector2D from './Vector2D.js';
 import { ProjectJsonParser } from './dataParser/JsonParser.js';
 import { SoundManager } from './SoundManager.js';
+import { MasterComponentManager } from './MasterComponentManager.js';
 
 
 export class MasterManager
@@ -40,6 +41,7 @@ export class MasterManager
         //target frames per second
         this.FPS=60;
 
+
         this.canvasWidth=800;
         this.canvasHeight=600;
 
@@ -53,6 +55,8 @@ export class MasterManager
         //stop 상태 : scene 정지 상태
         this.playerStatus="play";
 
+        this.UIComponentManager=new MasterComponentManager();
+
         }
 
 
@@ -63,6 +67,7 @@ export class MasterManager
           
             soundEvents.forEach(soundEvent => {
               if (soundEvent.timeLabel<=currentPlayTime && !soundEvent.isPlaying && this.playerStatus==="play") {
+                soundEvent.audio.currentTime=currentPlayTime-soundEvent.timeLabel;
                 soundEvent.play();
               }
             });
@@ -105,6 +110,8 @@ export class MasterManager
     {   
         this.frontCanvas=canvas;
         this.frontContext=canvas.getContext("2d");
+
+        this.UIComponentManager.bindMouseEvents(canvas);
     }
 
     /** 
@@ -138,6 +145,8 @@ export class MasterManager
     {
         this.clearScreen(this.frontCanvas);
         this.sceneRenderer.renderTargetScene(this.frontCanvas,this.sceneManager.getCurrentScene(), this.sceneTimer.getPlayTime());
+
+        this.UIComponentManager.renderComponents(this.frontCanvas, this.frontContext);
     }
 
 
