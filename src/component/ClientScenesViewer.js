@@ -68,7 +68,7 @@ const ClientScenesViewer = ({ scenes }) => {
         let currentPlayTime=sceneTimerList[index].getPlayTime();
 
         soundEvents.forEach(soundEvent => {
-          if (soundEvent.timeLabel<=currentPlayTime && !soundEvent.isPlaying && this.playerStatus==="play") {
+          if (soundEvent.timeLabel<=currentPlayTime && !soundEvent.isPlaying) {
             soundEvent.audio.currentTime=currentPlayTime-soundEvent.timeLabel;
             soundEvent.play();
           }
