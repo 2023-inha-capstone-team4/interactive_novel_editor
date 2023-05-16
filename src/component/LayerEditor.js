@@ -40,6 +40,15 @@ function LayerEditor(props)
     {
         setSelectedLayerIndex(index);
         masterManager.sceneManager.currentLayerIndex=index;
+
+        if(masterManager.sceneManager.getCurrentScene().layerList.length===0)
+        {
+            masterManager.UIComponentManager.setSelectedLayer(null);
+        }
+        else
+        {
+            masterManager.UIComponentManager.setSelectedLayer(masterManager.sceneManager.getCurrentScene().layerList[index]);
+        }
     }
 
     function addTextLayer()

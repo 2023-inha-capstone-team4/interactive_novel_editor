@@ -111,14 +111,24 @@ export class MasterManager
         this.frontCanvas=canvas;
         this.frontContext=canvas.getContext("2d");
 
+        this.bindMouseMoveRenderFix(canvas);
         this.UIComponentManager.bindMouseEvents(canvas);
+        this.UIComponentManager.bindKeyboardEvents(canvas);
+    }
+
+    bindMouseMoveRenderFix(canvas)
+    {
+      canvas.addEventListener('mouseup', (event)=>{
+
+        this.render();
+      });
     }
 
     /** 
      * 
      * Scene Play Time에 대한 정보를 로드한다.     * 
      */
-    prepareRenderingData()
+    updateSceneTimer()
     {
 
         //scene timer는 play, pause, stop이냐에 따라서 다르게 처리한다.
@@ -167,7 +177,7 @@ export class MasterManager
 
         this.masterTimer.updateTimer();
 
-        this.prepareRenderingData();
+        this.updateSceneTimer();
 
         this.render();
         this.applySoundSystem();

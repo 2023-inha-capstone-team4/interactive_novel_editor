@@ -1,6 +1,7 @@
 import { ScrollEditor } from "./MasterUI/ScrollEditor";
 import {CanvasButton} from "./KeyframeUI/CanvasButton";
 import Vector2D from "./Vector2D";
+import { useState } from "react";
 
 
 
@@ -8,32 +9,45 @@ export class MasterComponentManager
 {
 
     constructor() {
-        this.horizontalScrollEditorLeft= new ScrollEditor("horizontal", new Vector2D(300, 10));
-        this.horizontalScrollEditorRight= new ScrollEditor("horizontal", new Vector2D(300+180, 10));
+        this.horizontalScrollEditor= new ScrollEditor("horizontal", new Vector2D(300+90, 10));
 
-        this.verticalScrollEditorUp=new ScrollEditor("vertical", new Vector2D(10, 200));
-        this.verticalScrollEditorDown=new ScrollEditor("vertical",new Vector2D(10, 200+180));
-        this.scrollEditorList=[this.horizontalScrollEditorLeft, this.horizontalScrollEditorRight, this.verticalScrollEditorUp, this.verticalScrollEditorDown];
+        this.verticalScrollEditor=new ScrollEditor("vertical", new Vector2D(10, 200+90));
+        this.scrollEditorList=[this.horizontalScrollEditor, this.verticalScrollEditor];
 
 
 
 
-        this.positionButton=new CanvasButton(new Vector2D(300,40), 20, 20, 'https://cdn0.iconfinder.com/data/icons/flat-round-arrow-arrow-head/512/Red_Arrow_Right-512.png', this.onClickPosition);
-        this.scaleButton=new CanvasButton(new Vector2D(300+90,40), 20, 20, 'https://cdn-icons-png.flaticon.com/512/3484/3484377.png',this.onClickScale);
-        this.rotationButton=new CanvasButton(new Vector2D(300+180,40), 20, 20, 'https://cdn3.iconfinder.com/data/icons/flat-arrows-4/16/01_undo-rotate-left-512.png',this.onClickRotation);
+        this.positionButton=new CanvasButton(new Vector2D(120,30), 20, 20, 'https://cdn0.iconfinder.com/data/icons/flat-round-arrow-arrow-head/512/Red_Arrow_Right-512.png', this.onClickPosition);
+        this.scaleButton=new CanvasButton(new Vector2D(120+90,30), 20, 20, 'https://cdn-icons-png.flaticon.com/512/3484/3484377.png',this.onClickScale);
+        this.rotationButton=new CanvasButton(new Vector2D(120+180,30), 20, 20, 'https://cdn3.iconfinder.com/data/icons/flat-arrows-4/16/01_undo-rotate-left-512.png',this.onClickRotation);
         this.buttons=[this.positionButton,this.scaleButton,this.rotationButton];
 
         //현재 선택된 모드를 표시하는 버튼들. 클릭 처리를 하지 않음.
-        this.positionImgButton=new CanvasButton(new Vector2D(100,10), 20, 20, 'https://static-00.iconduck.com/assets.00/move-icon-2048x2048-zzenwpkq.png', null);
-        this.scaleImgButton=new CanvasButton(new Vector2D(100,10), 20, 20, 'https://cdn-icons-png.flaticon.com/512/3484/3484377.png', null);
-        this.rotationImgButton=new CanvasButton(new Vector2D(100,10), 20, 20, 'https://cdn3.iconfinder.com/data/icons/flat-arrows-4/16/01_undo-rotate-left-512.png', null);
+        this.positionImgButton=new CanvasButton(new Vector2D(20,10), 60, 60, 'https://static-00.iconduck.com/assets.00/move-icon-2048x2048-zzenwpkq.png', null);
+        this.scaleImgButton=new CanvasButton(new Vector2D(20,10), 60, 60, 'https://cdn-icons-png.flaticon.com/512/3484/3484377.png', null);
+        this.rotationImgButton=new CanvasButton(new Vector2D(20,10), 60, 60, 'https://cdn3.iconfinder.com/data/icons/flat-arrows-4/16/01_undo-rotate-left-512.png', null);
         this.modeButtons={"position":this.positionImgButton,"scale":this.scaleImgButton,"rotation":this.rotationImgButton};
 
-        //position, scale, rotation 모드를 선택할 수 있으며, 각 모드에 따라 scroll bar 편집 기능을 지원함.
-        this.mode="position";
 
         this.isDebouncing=false;
-    
+        this.mode="position";
+
+        this.onClickPosition = this.onClickPosition.bind(this);
+        this.onClickScale = this.onClickScale.bind(this);
+        this.onClickRotation = this.onClickRotation.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+
+        this.selectedLayer=null;
+        this.setSelectedLayer = this.setSelectedLayer.bind(this);
+
+        this.dragStartMouseX=0;
+        this.dragStartMouseY=0;
+    }
+
+    setSelectedLayer = (layer) =>
+    {
+        console.log(layer+ 'selected!');
+        this.selectedLayer=layer;
     }
 
     isIntersectSquareRange(offsetX, offsetY, xLength,yLength, mouseX, mouseY)
@@ -54,17 +68,17 @@ export class MasterComponentManager
 
     }
 
-    onClickPosition()
+    onClickPosition= () =>
     {
         this.mode="position";
     }
 
-    onClickScale()
+    onClickScale = () =>
     {
         this.mode="scale";
     }
 
-    onClickRotation()
+    onClickRotation =() =>
     {
         this.mode="rotation";
     }
@@ -110,6 +124,38 @@ export class MasterComponentManager
                             scroller.isHover=false;
                         }
                     });
+
+                
+                    this.scrollEditorList.forEach((scroller)=>{
+
+                        if(scroller.isMouseDragging && this.selectedLayer!==null)
+                        {
+                            this.selectedLayer.getKeyframes().forEach((keyframe)=>{
+    
+                                if(keyframe.isSelected)
+                                {
+                                    switch(this.mode)
+                                    {
+                                        case "position":
+                                            this.applyDragPosition(canvas,scroller.type,keyframe,mouseX, mouseY);
+                                            break;
+                                        case "scale":
+                                            this.applyDragScale(canvas, scroller.type,keyframe,mouseX, mouseY);
+                                            break;
+                                        case "rotation":
+                                            this.applyDragRotation(canvas, scroller.type,keyframe,mouseX, mouseY);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                            })
+                        }
+
+
+                    }
+                    );
+                    
                 });
 
 
@@ -125,13 +171,6 @@ export class MasterComponentManager
             
                   canvas.addEventListener('mousedown', (e) => {
 
-                    if (this.isDebouncing) return;
-  
-                    this.isDebouncing = true;
-                    
-                    setTimeout(() => {
-                      this.isDebouncing = false;
-                    }, 200); // Change the value depending on your needs
 
                     const rect = canvas.getBoundingClientRect();
                     const mouseX = e.clientX - rect.left;
@@ -175,18 +214,72 @@ export class MasterComponentManager
                 // }
                 
                 this.scrollEditorList.forEach((scroller)=>{
-                    
                     if(this.isIntersectSquareRange(scroller.position.x, scroller.position.y, scroller.buttonSize,scroller.buttonSize, mouseX, mouseY))
                     {
                         scroller.isMouseDragging=true;
+                        this.dragStartMouseX=mouseX;
+                        this.dragStartMouseY=mouseY;
                     }
 
                 });
-
      });
+    }
 
+    applyDragPosition(canvas,scrollerType, keyframe, mouseX, mouseY)
+    {
+        var delta=0;
+        switch(scrollerType)
+        {
+            case "horizontal":
+                delta=mouseX-this.dragStartMouseX;
+                this.dragStartMouseX=mouseX;
+                keyframe.position.x+=delta;
+            break;
+            case "vertical":
+                delta=mouseY-this.dragStartMouseY;
+                this.dragStartMouseY=mouseY;
+                keyframe.position.y+=delta;
+                break;
+            default:
+                break;
+        }
+    }
 
+    applyDragScale(canvas,scrollerType, keyframe, mouseX, mouseY)
+    {
+        var delta=0;
+        switch(scrollerType)
+        {
+            case "horizontal":
+                delta=(mouseX-this.dragStartMouseX)/canvas.height;
+                this.dragStartMouseX=mouseX;
+                keyframe.scale.x+=delta;
+            break;
+            case "vertical":
+                delta=(mouseY-this.dragStartMouseY)/canvas.height;
+                this.dragStartMouseY=mouseY;
+                keyframe.scale.y+=delta;
+                break;
+            default:
+                break;
+        }
+    }
 
+    applyDragRotation(canvas,scrollerType, keyframe, mouseX, mouseY)
+    {
+        var delta=0;
+        switch(scrollerType)
+        {
+            case "horizontal":
+                delta=((mouseX-this.dragStartMouseX)/canvas.width)*360;
+                this.dragStartMouseX=mouseX;
+                keyframe.rotation+=delta;
+            break;
+            case "vertical":
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -197,6 +290,29 @@ export class MasterComponentManager
     bindKeyboardEvents(canvas)
     {
 
+        canvas.setAttribute("tabindex", 0);
+        canvas.focus();
+
+        canvas.addEventListener("keydown", this.handleKeyDown);
+    }
+
+    
+    handleKeyDown = (event) => {
+        switch (event.key) {
+          case "q":
+            this.mode="position";
+            break;
+          case "w":
+            this.mode="scale";
+            break;
+          case "e":
+            this.mode="rotation";
+            break;
+          default:
+            this.mode=null;
+            //console.log("Key pressed: " + event.key);
+            break;
+        }
     }
 
 
@@ -216,6 +332,22 @@ export class MasterComponentManager
                 context.restore();
             }
         });
+
+        context.save();
+            switch(this.mode)
+            {
+                case "position":
+                    context.drawImage(this.positionImgButton.image,this.positionImgButton.position.x, this.positionImgButton.position.y,this.positionImgButton.xLength,this.positionImgButton.yLength);
+                break;
+                case "scale":
+                    context.drawImage(this.scaleImgButton.image,this.positionImgButton.position.x, this.positionImgButton.position.y,this.positionImgButton.xLength,this.positionImgButton.yLength);
+                break;
+                default:
+                    context.drawImage(this.rotationImgButton.image,this.positionImgButton.position.x, this.positionImgButton.position.y,this.positionImgButton.xLength,this.positionImgButton.yLength);
+                    break;
+                }
+
+        context.restore();
     }
 
 
