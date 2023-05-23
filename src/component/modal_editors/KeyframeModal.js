@@ -73,7 +73,7 @@ function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
     {
         if(0<= event.target.value && event.target.value<=15)
         {
-            settimeLabel(event.target.value);
+            settimeLabel(parseFloat(event.target.value));
         }
     }
 
@@ -122,6 +122,10 @@ function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
         }
     }
 
+    const generateColor = () => {
+        return `rgb(${red}, ${green}, ${blue})`;
+      };
+
 
     return (    
     <>
@@ -149,22 +153,24 @@ function KeyframeModal({type, Keyframes, OnChangeKeyframe, OnCancelClick})
                 {type==="text"? <>
                 <div className={styles.input_row}>
                     <h5>색상</h5>
-                    <div>Red</div> <input type="number" className={styles.input_box} value={red} onChange={(e)=>{changeRed(e)}}></input>
-                    <div>Green</div> <input type="number" className={styles.input_box} value={green} onChange={(e)=>{changeGreen(e)}}></input>
-                    <div>Blue</div> <input type="number" className={styles.input_box} value={blue} onChange={(e)=>{changeBlue(e)}}></input>
+                    <div style={{ backgroundColor: generateColor(), width: '20px', height: '10px' }}></div>
+                    <div>Red</div> <input type="range" min="0" max="255" className={styles.input_box} value={red} onChange={(e)=>{changeRed(e)}}></input>
+                    <div>Green</div> <input type="range" min="0" max="255" className={styles.input_box} value={green} onChange={(e)=>{changeGreen(e)}}></input>
+                    <div>Blue</div> <input type="range" min="0" max="255" className={styles.input_box} value={blue} onChange={(e)=>{changeBlue(e)}}></input>
                     </div>
                     </> :null}
                 <h5 className={styles.input_row}>시간
-                    <input type="number" value={timeLabel} onChange={(e)=>{changeTimeLabel(e)}}></input>
+                    <div>{timeLabel}</div>
+                    <input type="range" min="0" max="15" step="0.001" value={timeLabel} onChange={(e)=>{changeTimeLabel(e)}}></input>
                 </h5>
 
-                <div className={styles.input_row}>
-                    <button onClick={()=>{
+                <div className={styles.btns_row}>
+                    <button className={styles.btn} onClick={()=>{
 
                         changeKeyframeData();
 
                     }}>확인</button>
-                    <button onClick={OnCancelClick}>취소</button>
+                    <button className={styles.btn} onClick={OnCancelClick}>취소</button>
                 </div>
             </div>
         </Modal>

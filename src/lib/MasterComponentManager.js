@@ -251,12 +251,12 @@ export class MasterComponentManager
         switch(scrollerType)
         {
             case "horizontal":
-                delta=(mouseX-this.dragStartMouseX)/canvas.height;
+                delta=5.0*(mouseX-this.dragStartMouseX)/canvas.width;
                 this.dragStartMouseX=mouseX;
                 keyframe.scale.x+=delta;
             break;
             case "vertical":
-                delta=(mouseY-this.dragStartMouseY)/canvas.height;
+                delta=5.0*(mouseY-this.dragStartMouseY)/canvas.height;
                 this.dragStartMouseY=mouseY;
                 keyframe.scale.y+=delta;
                 break;

@@ -35,8 +35,21 @@
   display:flex;
   flex-wrap: nowrap;
   flex-direction: row;
-  justify-content: space-around;
+
   align-items: center;
+}
+
+.btn
+{
+  border-color: lightpink;
+  background-color: white;
+  border-radius: 20px;
+  padding: 5px 10px 5px 10px;
+}
+
+.btn:hover
+{
+  background-color: floralwhite;
 }
 
 .name_text_area

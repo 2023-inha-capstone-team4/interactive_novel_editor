@@ -162,16 +162,20 @@ function SoundListView({currentSceneIndex,soundList})
                     changeSoundNameTextfield(e);
                 }}></textarea>
 
+                <div>재생 시작 시간</div>
+                <div>{rangeScrollerValue}</div>
                 <input
+                        style={{width:"50%"}}
                         type="range"
                         min={0}
                         max={15}
+                        step="0.001"
                         value={rangeScrollerValue}
                         onChange={handleSliderChange}
                         />
 
                 <div className={styles.modal_btn_box}>
-                    <button onClick={()=>{
+                    <button className={styles.btn} onClick={()=>{
                         
                         if(nameText.length===0)
                         {
@@ -192,7 +196,7 @@ function SoundListView({currentSceneIndex,soundList})
 
 
                         }}>변경하기</button>
-                    <button onClick={closeSoundEditModal}>취소</button>
+                    <button className={styles.btn} onClick={closeSoundEditModal}>취소</button>
                 </div>
             </Modal>
     :null}
