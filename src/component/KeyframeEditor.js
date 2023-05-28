@@ -62,7 +62,7 @@ function KeyframeEditor()
     const numberingIntervalOffsetX=horizontalLineLength/numberCounts;
     const numberingEndOffsetX=numberingStartOffsetX+numberingIntervalOffsetX*(numberCounts-1);
 
-    var isMouseDragging=false;
+    
 
 
     const [keyframeEditModalOpened, setKeyframeEditModalOpen] = useState(false);
@@ -70,6 +70,8 @@ function KeyframeEditor()
 
     //canvas button 당 event가 1회씩만 발생하도록 Debouncing 테크닉을 적용한다.
     let isDebouncing = false;
+
+    let isKeyframeDragging=false;
 
 
     const KVline =new KeyframeVerticalLine();
@@ -190,11 +192,7 @@ function KeyframeEditor()
     }
 
 
-    function checkHover(mouseX, mouseY)
-    {
-        if(isMouseDragging) return;
 
-    }
 
     function isIntersectCircularBtn(centerPosition, radius, mouseX, mouseY)
     {
@@ -311,7 +309,6 @@ function KeyframeEditor()
 
     function updateUI()
     {
-        checkHover();
         checkDragAndClick();
     }
 
@@ -573,6 +570,9 @@ function KeyframeEditor()
 
                     });
 
+
+
+
                     //intersection 검출 keyframeverticalline
                     let progressRate=1.0-(numberCounts-masterManager.sceneTimer.getPlayTime())/parseFloat(numberCounts);
                     let vlineXOffset=Math.min(horizontalLineLength,horizontalLineLength*progressRate);
@@ -640,14 +640,45 @@ function KeyframeEditor()
                             keyframe.isHover=false;
                         }
 
+
+                        if(keyframes[i].isMouseDragging)
+                        {
+                            masterManager.pause();
+
+                            if(mouseX<=horizontalLineStartOffsetX-25)
+                            {
+                                keyframes[i].timeLabel=0;
+                            }
+                            else if(horizontalLineStartOffsetX+horizontalLineLength<=mouseX)
+                            {
+                                keyframes[i].timeLabel=numberCounts;
+                            }
+                            else
+                            {
+                                let progressRate=mouseX/parseFloat(horizontalLineStartOffsetX+ horizontalLineLength);
+                                
+                                keyframes[i].timeLabel=(progressRate*numberCounts);
+                            }
+                        }
+
                     }
 
                     
                   });
             
                   canvasRef.current.addEventListener('mouseup', () => {
-                    isMouseDragging=false;
                     KVline.isMouseDragging=false;
+
+                    let currentLayerIndex= masterManager.sceneManager.currentLayerIndex;
+                    let keyframes=masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex].getKeyframes();
+                    isKeyframeDragging=false;
+
+                    for(var i=0; i<keyframes.length; i++)
+                    {
+                        keyframes[i].isMouseDragging=false;
+                    }
+
+
                   });
             
             
@@ -710,13 +741,17 @@ function KeyframeEditor()
 
                         let keyframeXOffset= horizontalLineLength*progressRate;
 
-                        if(isIntersectSquareRange(horizontalLineStartOffsetX+keyframeXOffset-5.0, horizontalLineStartOffsetY-5.0,10,10,mouseX, mouseY))
+                        if(isIntersectSquareRange(horizontalLineStartOffsetX+keyframeXOffset-5.0, horizontalLineStartOffsetY-5.0,10,10,mouseX, mouseY) && !isKeyframeDragging)
                         {
                             keyframes[i].isSelected=true;
+                            keyframes[i].isMouseDragging=true;
+                            isKeyframeDragging=true;
+                            return;
                         }
                         else
                         {
                             keyframes[i].isSelected=false;
+                            keyframes[i].isMouseDragging=false;
                         }
                     }
 
