@@ -14,7 +14,7 @@ function SceneItem(props)
 
 
     return (
-        <div className={styles.scene_item_box} style={{backgroundColor:props.isSelected?"pink":null }} draggable="true" onClick={props.onClick}>
+        <div className={styles.scene_item_box} style={{backgroundColor:props.isSelected?"lavender":null }} draggable="true" onClick={props.onClick}>
             <div className='scene_name'>{scene.name}</div>
         </div>
     );

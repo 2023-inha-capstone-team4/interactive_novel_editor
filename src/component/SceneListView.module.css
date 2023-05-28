@@ -5,7 +5,8 @@
     min-width:150px;
     
     text-align: center;
-    background-color: gainsboro;
+    background-color: black;
+    color:white;
 
     position:sticky;
 }
@@ -19,7 +20,9 @@
    flex-direction: column;
    justify-content: space-between;
 
-   background-color:bisque;
+   background-color:darkblue;
+   color:white;
+
 }
 
 
@@ -27,8 +30,30 @@
 {
   height:560px;
   overflow-y:scroll;
-  background-color: aquamarine;
+  background-color: white;
 
+
+}
+
+.scenes::-webkit-scrollbar
+{
+  background-color:white;
+  width:8px;
+  border-right:1px solid gainsboro;
+}
+
+.scenes::-webkit-scrollbar-thumb
+{
+  background-color:gainsboro;
+  border: 1px solid white;
+  width:8px;
+  border-radius: 20px;
+  scrollbar-width: thin;
+}
+
+.scenes::-webkit-scrollbar-thumb:hover
+{
+  background-color: black;
 }
 
 .modal_btn_box

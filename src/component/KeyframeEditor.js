@@ -363,7 +363,7 @@ function KeyframeEditor()
         if(masterManager.sceneManager.getCurrentScene()==null) return;
         if(masterManager.sceneManager.getCurrentScene().layerList.length===0) return;
 
-        let currentLayerIndex= masterManager.sceneManager.currentLayerIndex;
+        let currentLayerIndex= masterManager.sceneManager.getCurrentScene().selectedLayerIndex;
         let keyframes=masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex].getKeyframes();
 
         //Render Representative keyframe clicker

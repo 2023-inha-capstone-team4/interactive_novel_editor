@@ -6,11 +6,13 @@
     align-items:center;
     max-width: 100%;
     border-bottom:1px solid gainsboro;
+    background-color: white;
+    color:black;
 }
 
 .scene_item_box:hover
 {
-    background-color: azure;
+    background-color:aliceblue;
     cursor:pointer;
 }
 

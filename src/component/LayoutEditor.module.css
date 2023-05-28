@@ -4,13 +4,11 @@
     height:600px;
     min-width:300px;
     max-width:300px;
-    border: 1px solid gainsboro;
     display:flex;
     flex-direction: column;
     
     flex-wrap: nowrap;
-
-    overflow:scroll;
+    overflow-x:hidden;
     flex-grow: 1;
     z-index: 10;
 }
@@ -19,7 +17,10 @@
 {
     text-align: center;
     width:100%;
-    background-color: gainsboro;
+    background-color: black;
+    color:white;
+
+    font-size: 1.2rem;
 }
 
 .layer_list
@@ -28,5 +29,25 @@
     flex-direction: column-reverse;
     height:100%;
     overflow-y: scroll;
+}
 
+.layer_list::-webkit-scrollbar-thumb
+{
+  background-color:gainsboro;
+  border: 1px solid white;
+  width:8px;
+  border-radius: 20px;
+  scrollbar-width: thin;
+  
+}
+
+.layer_list::-webkit-scrollbar-thumb:hover
+{
+  background-color: black;
+}
+
+
+.layer_list::-webkit-scrollbar{
+    border-right:1px solid gainsboro;
+    width:8px;
 }

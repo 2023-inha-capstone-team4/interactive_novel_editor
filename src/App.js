@@ -14,6 +14,7 @@ function App() {
 
   return (
     <>
+	
 	<MasterManagerContext.Provider value={new MasterManager()}>
     	<Header/>
 		<main>

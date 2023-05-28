@@ -40,7 +40,7 @@ function LayerItem({index, isSelected, onClick, layer, initialRepeatType}) {
     return <>
     <div
     
-    draggable="true" className={`${styles.layer_item}`} style={{backgroundColor:isSelected? "pink": "azure"}} onClick={onClick} >{layer.name}
+    draggable="true" className={`${styles.layer_item}`} style={{backgroundColor:isSelected? "lavender": null}} onClick={onClick} >{layer.name}
     {repeatType==="none"? <div className={styles.repeat_type} onClick={chnageRepeatType}>X</div>:null}
     {repeatType==="forward"? <div className={styles.repeat_type} onClick={chnageRepeatType}>→</div>:null}
     {repeatType==="reverse"? <div className={styles.repeat_type} onClick={chnageRepeatType}>↔</div>:null}

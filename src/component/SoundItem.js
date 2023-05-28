@@ -12,7 +12,7 @@ function SoundItem({name, onClick, isSelected}) {
     return <>
     <div
     
-    draggable="true" className={`${styles.layer_item}`} style={{backgroundColor:isSelected? "pink": "azure"}} onClick={onClick} >{name}
+    draggable="true" className={`${styles.layer_item}`} style={{backgroundColor:isSelected? "lavender": "azure"}} onClick={onClick} >{name}
     </div>
     </>;
 }
