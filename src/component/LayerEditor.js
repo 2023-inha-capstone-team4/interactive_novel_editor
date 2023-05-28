@@ -129,9 +129,11 @@ function LayerEditor(props)
             <div className={styles.layer_list}>
                 {
                     currentLayerList.map((layer, index, arr)=>{
-                        return <LayerItem key={Math.random()} isSelected={(selectedLayerIndex===index)}         
-                        repeatType={layer.repeatType}
-                        layer={layer} onClick={()=>{
+                        return <LayerItem key={Math.random()} isSelected={(selectedLayerIndex===index)}
+                        index={index}         
+                        layer={layer}
+                        initialRepeatType={layer.repeatType}
+                        onClick={()=>{
 
                             selectLayer(index);
 
