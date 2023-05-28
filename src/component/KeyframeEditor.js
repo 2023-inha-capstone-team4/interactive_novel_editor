@@ -611,6 +611,7 @@ function KeyframeEditor()
                             
                             masterManager.sceneTimer.setPlayTime(progressRate*numberCounts);
                         }
+
                     }
                     
                     //get Keyframe list
@@ -659,6 +660,8 @@ function KeyframeEditor()
                                 
                                 keyframes[i].timeLabel=(progressRate*numberCounts);
                             }
+
+                            masterManager.sceneManager.getCurrentScene().layerList[currentLayerIndex].sortKeyframes();
                         }
 
                     }
