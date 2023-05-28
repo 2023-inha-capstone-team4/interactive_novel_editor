@@ -37,7 +37,9 @@ export class SceneManager
     }
 
     removeSelectedScene() {
-        this.sceneList.splice(this.curSceneIdx,1);
+        this.sceneList=this.sceneList.filter((item, index) => 
+         {return index!==this.curSceneIdx; }
+        );
 
         if(this.curSceneIdx<=1)
           this.curSceneIdx=0;

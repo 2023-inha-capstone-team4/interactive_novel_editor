@@ -33,12 +33,8 @@ function ScenesListView()
 
     function selectScene(index)
     {
-        if(masterManager.sceneManager.curSceneIdx===index) return;
-
-
         masterManager.sceneManager.curSceneIdx=index;
         setSelectedSceneIndex(masterManager.sceneManager.curSceneIdx);
-        setSceneList([...masterManager.sceneManager.sceneList]);
 
         masterManager.stop();
     }
@@ -69,11 +65,13 @@ function ScenesListView()
 
     function changeSceneName()
     {
-       let currentScene= masterManager.sceneManager.getCurrentScene();
+       let currentScene= masterManager.sceneManager.sceneList[masterManager.sceneManager.curSceneIdx];
        
        if(currentScene==null) return;
 
        currentScene.name=nameText;
+
+       setSceneList([...masterManager.sceneManager.sceneList]);
     }
 
     function closeChangeSceneNameModal()
@@ -91,7 +89,7 @@ function ScenesListView()
 
 
         masterManager.sceneManager.removeSelectedScene();
-        setSelectedSceneIndex(masterManager.sceneManager.curSceneIdx);
+        selectScene(masterManager.sceneManager.curSceneIdx);
         setSceneList([...masterManager.sceneManager.sceneList]);
 
         masterManager.stop();
@@ -100,7 +98,7 @@ function ScenesListView()
     useEffect(() => {
         setSceneList([...masterManager.sceneManager.sceneList]);
     
-    }, [masterManager.sceneManager.sceneList,selectedSceneIndex]);
+    }, [masterManager.sceneManager.sceneList]);
     
 
 
@@ -112,7 +110,7 @@ function ScenesListView()
             {
                 sceneList.map((sceneItem, index, array)=>{
 
-                    return <SceneItem key={index} scene={sceneItem} index={index} isSelected={(selectedSceneIndex===index)} onClick={()=>{selectScene(index)}}></SceneItem>
+                    return <SceneItem key={Math.random()} scene={sceneItem} index={index} isSelected={(selectedSceneIndex===index)} onClick={()=>{selectScene(index)}}></SceneItem>
                 })
             }
             </div>
