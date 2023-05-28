@@ -122,7 +122,7 @@ function SoundListView({currentSceneIndex,soundList})
         {
             sndList!==null?
                     sndList.map((soundEvent, index, arr)=>{
-                        return <SoundItem key={index} isSelected={(selectSoundIndex===index)}
+                        return <SoundItem key={Math.random()} isSelected={(selectSoundIndex===index)}
                         name={soundEvent.name}         
                         soundEvent={soundEvent} onClick={()=>{
 
