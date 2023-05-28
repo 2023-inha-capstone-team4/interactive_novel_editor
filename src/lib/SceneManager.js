@@ -37,20 +37,12 @@ export class SceneManager
     }
 
     removeSelectedScene() {
-        this.sceneList = this.sceneList.filter((scene, index, arr) => {
-          return index !== this.curSceneIndex;
-        });
-      
-        if (this.sceneList.length ===1) {
-          this.currentScene=this.sceneList[0];
-          this.curSceneIndex = 0;
-        } else if(this.sceneList.length===0){
+        this.sceneList.splice(this.curSceneIdx,1);
+
+        if(this.curSceneIdx<=1)
           this.curSceneIdx=0;
-        }
         else
-        {
-          this.curSceneIdx-=1;
-        }
+          this.curSceneIdx=this.curSceneIdx-1;
       }
 
     selectScene(sceneIndex)

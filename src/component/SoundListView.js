@@ -120,6 +120,7 @@ function SoundListView({currentSceneIndex,soundList})
         <div className={styles.list_title}>Sounds</div>
         <div className={styles.sounds}>
         {
+            sndList!==null?
                     sndList.map((soundEvent, index, arr)=>{
                         return <SoundItem key={index} isSelected={(selectSoundIndex===index)}
                         name={soundEvent.name}         
@@ -129,7 +130,7 @@ function SoundListView({currentSceneIndex,soundList})
 
                         }}/>
                     })
-                }
+                :null}
         </div>
         <MenuBar>
             <MenuItem imageSrc={plusIconSrc} onClick={()=>{}}>

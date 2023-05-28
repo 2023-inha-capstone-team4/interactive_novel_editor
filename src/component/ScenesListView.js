@@ -86,8 +86,15 @@ function ScenesListView()
 
     function deleteCurrentScene()
     {
+        if(masterManager.sceneManager.sceneList.length===0) return;
+        if(masterManager.sceneManager.sceneList.length===1) return; //최소 scene이 1개는 있어야 작품이 성립함.
+
+
         masterManager.sceneManager.removeSelectedScene();
-        selectScene(masterManager.sceneManager.curSceneIdx);
+        setSelectedSceneIndex(masterManager.sceneManager.curSceneIdx);
+        setSceneList([...masterManager.sceneManager.sceneList]);
+
+        masterManager.stop();
     }
 
     useEffect(() => {
@@ -119,7 +126,7 @@ function ScenesListView()
             </MenuBar>
         </section>
         <LayerEditor currentSceneIndex={selectedSceneIndex}/>
-        <SoundListView currentSceneIndex={selectedSceneIndex} soundList={masterManager.sceneManager.getCurrentScene().soundList}/>
+        <SoundListView currentSceneIndex={selectedSceneIndex} soundList={masterManager.sceneManager.sceneList.length!==0? masterManager.sceneManager.getCurrentScene().soundList : null}/>
         
         {
             //change name modal

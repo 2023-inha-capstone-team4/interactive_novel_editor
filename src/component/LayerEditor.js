@@ -66,6 +66,9 @@ function LayerEditor(props)
 
     function changeCurrentLayerName()
     {
+        if(masterManager.sceneManager.sceneList.length===0) return;
+        if(masterManager.sceneManager.getCurrentScene().layerList.length===0) return;
+
         setIsOpenChangeNameModal(true);
     }
 

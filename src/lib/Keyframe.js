@@ -25,6 +25,7 @@ export class Keyframe
         this.image_fade_alpha=image_fade_alpha;
 
         this.isHover=false;
+        this.isMouseDragging=false;
         this.isSelected=false;
     }
 

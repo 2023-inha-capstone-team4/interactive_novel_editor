@@ -61,6 +61,9 @@ export class MasterManager
 
 
         applySoundSystem() {
+
+          if(this.sceneManager.sceneList.length===0) return;
+
             const currentScene = this.sceneManager.getCurrentScene();
             const soundEvents = currentScene.soundList;
             const currentPlayTime = this.sceneTimer.getPlayTime();
@@ -110,18 +113,8 @@ export class MasterManager
     {   
         this.frontCanvas=canvas;
         this.frontContext=canvas.getContext("2d");
-
-        this.bindMouseMoveRenderFix(canvas);
         this.UIComponentManager.bindMouseEvents(canvas);
         this.UIComponentManager.bindKeyboardEvents(canvas);
-    }
-
-    bindMouseMoveRenderFix(canvas)
-    {
-      canvas.addEventListener('mouseup', (event)=>{
-
-        this.render();
-      });
     }
 
     /** 
@@ -181,7 +174,6 @@ export class MasterManager
 
         this.render();
         this.applySoundSystem();
-
     }
 
 
