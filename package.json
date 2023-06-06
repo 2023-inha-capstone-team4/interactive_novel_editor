@@ -1,7 +1,7 @@
 {
   "name": "react_my_portfolio",
   "version": "0.1.0",
-  "type": "module",
+  "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
@@ -44,5 +44,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://34.64.185.90:8080/"
 }
