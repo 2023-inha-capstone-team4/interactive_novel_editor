@@ -9,9 +9,11 @@ import { MasterManager } from './lib/MasterManager';
 import { MasterManagerContext } from './lib/MasterManagerContext';
 
 function App(props) {
+  const { novelId, handleSave, jsonData } = props;
+
   return (
     <>
-      <MasterManagerContext.Provider value={new MasterManager(props.novelId)}>
+      <MasterManagerContext.Provider value={new MasterManager(novelId, handleSave, jsonData)}>
         <Header />
         <main>
           <div className="top_contents">

@@ -10,10 +10,12 @@ import Vector2D from './Vector2D.js';
 import { ProjectJsonParser } from './dataParser/JsonParser.js';
 import { SoundManager } from './SoundManager.js';
 import { MasterComponentManager } from './MasterComponentManager.js';
+import { JsonParser } from './dataParser/JsonParser.js';
 
 export class MasterManager {
-  constructor(novelId) {
+  constructor(novelId, handleSave, jsonData) {
     this.novelId = novelId;
+    this.handleSave = handleSave;
 
     //create timer
     this.masterTimer = new MasterTimer();
@@ -25,6 +27,10 @@ export class MasterManager {
 
     //scene Manager
     this.sceneManager = new SceneManager();
+    if (jsonData) {
+      const sceneList = JsonParser.jsonToSceneList(jsonData);
+      this.sceneManager.sceneList = sceneList;
+    }
 
     //
     this.soundManager = new SoundManager();
