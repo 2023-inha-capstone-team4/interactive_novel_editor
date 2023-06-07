@@ -41,15 +41,14 @@ export class JsonParser
         const layer = new TextLayer();
         layer.name = json.name;
         layer.repeatType = json.repeatType;
-        layer.setText(json.text);
       
         for (const keyframeJson of json.keyframeList) {
           const keyframe = new TextKeyframe(
             keyframeJson.timeLabel,
             new Vector2D(keyframeJson.position.x, keyframeJson.position.y),
-            new Vector2D( keyframeJson.scale.X, keyframeJson.scale.y),
+            new Vector2D( keyframeJson.scale.x, keyframeJson.scale.y),
             keyframeJson.rotation,
-            keyframeJson.text_fade_alpha,
+            keyframeJson.image_fade_alpha,
             keyframeJson.color
           );
           layer.addKeyframe(keyframe);

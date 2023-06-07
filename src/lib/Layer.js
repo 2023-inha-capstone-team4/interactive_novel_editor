@@ -91,6 +91,7 @@ export class ImageLayer extends Layer
     constructor(image_path)
     {
         super();
+        this.imagePath=image_path;
         this.image=new Image();
         this.image.src=image_path;
 
