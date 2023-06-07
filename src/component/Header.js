@@ -36,15 +36,13 @@ function Header() {
       <div className={styles.header}>
         <nav>
           <ul className={styles.options}>
-            <li>새 프로젝트</li>
             <li
               onClick={() => {
-                onClickSaveProjectJson();
+                //onClickSaveProjectJson();
               }}
             >
               저장
             </li>
-            <li onClick={() => {}}>열기</li>
             <li
               onClick={() => {
                 onClickPreview();
