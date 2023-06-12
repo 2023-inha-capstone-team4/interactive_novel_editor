@@ -1,6 +1,15 @@
-### <키프레임 애니메이션 시스템>
+# interactive_novel_editor
 
-## 1) MasterManager에서 렌더링 시스템을 통제합니다.
+Interactive Novel 작품 에디터 모듈 레포지터리입니다.
+
+## 실행 절차
+
+- 본 에디터 모듈은 작가 서비스의 연동 없이는 실행이 어려우며, 작가 서비스 프로젝트에 내장되어 있습니다. [작가 서비스 저장소](https://github.com/2023-inha-capstone-team4/interactive-novel-creators-web)를 참고하여 작가 서비스 내의 에디터를 실행해주시기 바랍니다.
+- 또는 배포된 [작가 서비스](http://interactive-novel-creators-web.s3-website.kr.object.ncloudstorage.com/)에 접속하여 실행 가능합니다.
+
+## 키프레임 애니메이션 시스템
+
+### 1) MasterManager에서 렌더링 시스템을 통제합니다.
 
 Scene Data를 메모리 상에 저장하고 관리하는 SceneManager,
 현재 선택된 scene을 캔버스에 렌더링 하는 SceneRenderer,
@@ -8,11 +17,13 @@ Scene Data를 메모리 상에 저장하고 관리하는 SceneManager,
 Scene의 현재 재생시간을 통제하는 SceneTimer,
 현재의 재생상태를 나타내는 playerStatus를 가지고 있습니다.
 
-## 2) playerStatus는 play, stop 2가지 상태로 나뉘며,
+### 2) playerStatus는 play, stop 2가지 상태로 나뉘며,
+
 play상태이면 sceneTimer가 update되고
 키프레임 애니메이션이 재생됩니다.
 
-## 3) 각각의 Keyframe은 다음의 정보를 담고 있습니다.
+### 3) 각각의 Keyframe은 다음의 정보를 담고 있습니다.
+
 - timeLabel : keyframe이 위치한 시간대 (float)
 - position : keyframe에서의 위치 (Vector2D)
 - scale : keyframe에서의 이미지 배율 (Vector2D)
@@ -22,27 +33,29 @@ play상태이면 sceneTimer가 update되고
 * 이미지 회전의 경우 360, 720, 1080 등 n바퀴 회전 정의가 가능합니다.
 * 텍스트는 color 값을 가지고 있습니다. (red, green, blue 각각 0~255)
 
-## 4) 각각의 Layer는 다음의 정보를 담고 있습니다.
+### 4) 각각의 Layer는 다음의 정보를 담고 있습니다.
+
 - image : 자바스크립트의 Image 오브젝트. 소스 주소를 가지고 있습니다.
 - keyframeList : 키프레임의 목록입니다.
 - layer는 keyframe 목록에 따라, sceneRenderer에서 Linear Interpolation되어 화면에 렌더링 됩니다.
 
 * 현재 ImageLayer만 구현이 완료되었고,
-TextLayer는 구현을 해야합니다.
+  TextLayer는 구현을 해야합니다.
 
-## 5) 각각의 Scene은 다음의 정보를 담고 있습니다.
+### 5) 각각의 Scene은 다음의 정보를 담고 있습니다.
+
 -layerList
 -soundList
 
 - layer는 0번부터 순차적으로 렌더링 되며, index가 클수록 나중에 렌더링 되어
-index가 작은 layer들의 위쪽에 위치하게 됩니다.
+  index가 작은 layer들의 위쪽에 위치하게 됩니다.
 
 - sound는 0번부터 순차적으로 사운드 채널을 할당해 출력되며,
-sceneRenderer에 의해 SoundKeyframe에 의해 volume(소리 크기)이 Linear Interpolation 되어 출력됩니다.
-아직 구현되지 않았습니다.
-
+  sceneRenderer에 의해 SoundKeyframe에 의해 volume(소리 크기)이 Linear Interpolation 되어 출력됩니다.
+  아직 구현되지 않았습니다.
 
 ## Todo.
+
 1. Sound Layer 구현
 2. 세이브 및 로드 기능 구현
 3. 프로젝트 저장, 수정, 삭제 기능 (server)
